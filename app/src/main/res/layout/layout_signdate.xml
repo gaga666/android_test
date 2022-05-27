@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white">
+    <TextView
+        android:id="@+id/tvYear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="2022年5月"
+        android:gravity="center"
+        android:textColor="@android:color/black" />
+    <com.example.charge.InnerGridView
+        android:id="@+id/gvWeek"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:numColumns="7">
+    </com.example.charge.InnerGridView>
+    <com.example.charge.InnerGridView
+        android:id="@+id/gvDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:numColumns="7">
+    </com.example.charge.InnerGridView>
+</LinearLayout>
