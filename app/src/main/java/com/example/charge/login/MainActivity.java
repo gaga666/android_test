@@ -38,9 +38,9 @@ public class MainActivity extends AppCompatActivity {
     // loading dialog
     private LoadingDialog mLoadingDialog;
 
-    EditText lg_username,lg_password;
-    TextView lg_forgetPsd;
-    CheckBox lg_rememberPsd;
+    private EditText lg_username,lg_password;
+    private TextView lg_forgetPsd;
+    private CheckBox lg_rememberPsd;
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
 
