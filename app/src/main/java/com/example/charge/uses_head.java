@@ -1,15 +1,39 @@
 package com.example.charge;
 
 import android.annotation.SuppressLint;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.FileUtils;
 import android.provider.MediaStore;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.charge.api.remote.Api;
+import com.example.charge.entity.DataResponse;
+import com.example.charge.entity.ImageInfo;
+import com.example.charge.utils.LogUtils;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Type;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 public class uses_head extends AppCompatActivity {
     protected static final int CHOOSE_PICTURE = 0;
@@ -36,15 +60,96 @@ public class uses_head extends AppCompatActivity {
             }
         });
     }
-        @SuppressLint("MissingSuperCall")
-        @Override
-        protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+    @RequiresApi(api = Build.VERSION_CODES.Q)
+    @SuppressLint("MissingSuperCall")
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 2) {
            if (data != null){
                Uri uri = data.getData();
                use_image.setImageURI(uri);
+               // 上传
+               upload(uri);
            }
         }
+    }
+
+    /**
+     * 上传图片
+     * @param uri
+     */
+    @RequiresApi(api = Build.VERSION_CODES.Q)
+    private void upload(Uri uri) {
+        File file = uriToFile(uri);
+        Api.uploadImage(file, new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                LogUtils.error("上传失败");
+                LogUtils.error(e.getLocalizedMessage());
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                LogUtils.log("上传成功");
+                ResponseBody resBody = response.body();
+                if (resBody != null) {
+                    String jsonStr = resBody.string();
+                    LogUtils.log("json -> " + jsonStr);
+                    ObjectMapper mapper = new ObjectMapper();
+                    DataResponse<ImageInfo> res = mapper.readValue(jsonStr, new TypeReference<DataResponse<ImageInfo>>(){});
+                    // get response code
+                    int code = res.getCode();
+                    LogUtils.log("code -> " + code);
+                    // get response message
+                    String msg = res.toString();
+                    LogUtils.log("message -> " + msg);
+                    // get response data {"imageWidth": xx, "imageHeight": xx, "imageUrl": xx}
+                    ImageInfo imageInfo = res.getData();
+                    LogUtils.log("data -> "  + imageInfo.toString());
+                } else {
+                    LogUtils.error("resBody == null");
+                }
+            }
+        });
+    }
+
+    /**
+     * Android 10(Q)及以上 Uri to File
+     * @param uri
+     * @return
+     */
+    @RequiresApi(api = Build.VERSION_CODES.Q)
+    private File uriToFile(final Uri uri) {
+        File file = null;
+
+        if (uri == null) {
+            return null;
+        }
+
+        if (uri.getScheme().equals(ContentResolver.SCHEME_FILE)) {
+            file = new File(uri.getPath());
+        } else if (uri.getScheme().equals(ContentResolver.SCHEME_CONTENT)) {
+            // 把文件复制到沙盒目录
+            ContentResolver contentResolver = getContentResolver();
+            // tempName
+            String tempName =
+                    System.currentTimeMillis() + "_" + Math.round((Math.random() + 1) * 1000)
+                            + "." + MimeTypeMap.getSingleton().getExtensionFromMimeType(contentResolver.getType(uri));
+            LogUtils.log("tempName -> " + tempName);
+            try {
+                InputStream is = contentResolver.openInputStream(uri);
+                File cache = new File(getCacheDir().getAbsolutePath(), tempName);
+                FileOutputStream fos = new FileOutputStream(cache);
+                FileUtils.copy(is, fos);
+                file = cache;
+                fos.close();
+                is.close();
+            } catch (IOException e) {
+                LogUtils.error(e.getLocalizedMessage());
+            }
+        }
+        return file;
     }
 }
 
