@@ -18,8 +18,8 @@ public enum ApiUrlEnum {
     /** 换绑邮箱 */
     CHANGE_MAIL("passport/change/mail"),
 
-    /** 上传头像 */
-    UPLOAD_ALBUM("file_up");
+    /** 上传图片 */
+    UPLOAD_ALBUM("generic/fs/upload_album");
 
     private final String url;
 
