@@ -16,7 +16,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.charge.First;
+import com.example.charge.LoopView;
 import com.example.charge.R;
 import com.example.charge.api.remote.Api;
 import com.example.charge.entity.MessageResponse;
@@ -180,7 +180,7 @@ public class MainActivity extends AppCompatActivity {
                         public void run() {
                             Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
                             if (code == 0) {
-                                Intent i = new Intent(MainActivity.this, First.class);
+                                Intent i = new Intent(MainActivity.this, LoopView.class);
                                 startActivity(i);
                                 overridePendingTransition(0, 0);
                             }
