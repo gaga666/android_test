@@ -18,6 +18,7 @@ import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class ApiHttpClient {
@@ -93,7 +94,6 @@ public class ApiHttpClient {
         log("GET " + partUrl + "?" + params);
     }
 
-
     public static void post(String partUrl, Map<String, String> params, Callback callback) {
         FormBody.Builder formBodyBuilder = new FormBody.Builder();
         if (params != null) {
@@ -109,5 +109,15 @@ public class ApiHttpClient {
         CLIENT.newCall(request).enqueue(callback);
         log("POST " + partUrl + "?" + params);
     }
+
+    public static void post(String partUrl, RequestBody requestBody, Callback callback) {
+        Request request = new Request.Builder()
+                .url(getAbsoluteApiUrl(partUrl))
+                .post(requestBody)
+                .build();
+        CLIENT.newCall(request).enqueue(callback);
+        log("POST " + partUrl + "?" + requestBody);
+    }
+
 
 }

@@ -1,14 +1,20 @@
 package com.example.charge.api.remote;
 
 import android.net.Uri;
+import android.webkit.MimeTypeMap;
 
 import com.example.charge.api.ApiHttpClient;
 import com.example.charge.api.ApiUrlEnum;
+import com.example.charge.utils.LogUtils;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
 import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 
 public class Api {
 
@@ -59,12 +65,28 @@ public class Api {
         params.put("code", code);
         ApiHttpClient.post(ApiUrlEnum.CHANGE_MAIL.getUrl(), params, callback);
     }
-    /**
-     * <string,string><string,file>
-     */
-    public static  void UPLOAD_ALBUM(Uri file_up, Callback callback){
-        Map<String, String> params = new HashMap<>();
-        params.put("file_up",file_up.toString());
-        ApiHttpClient.post(ApiUrlEnum.UPLOAD_ALBUM.getUrl(),params,callback);
+
+    public static void uploadImage(File file, Callback callback) {
+        // 文件名
+        String filename = file.getName();
+        int dotPos = filename.lastIndexOf(".");
+        // 文件拓展名, eg: png
+        String extension = filename.substring(dotPos + 1);
+        // 媒体类型, eg: image/png
+        String mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
+
+        // print the value of variable for debugging
+        LogUtils.log("filename -> " + filename);
+        LogUtils.log("extension -> " + extension);
+        LogUtils.log("mimeType -> " + mimeType);
+
+        RequestBody fileBody = RequestBody.create(file, MediaType.parse(mimeType));
+
+        RequestBody requestBody = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("file_up", filename, fileBody)
+                .build();
+
+        ApiHttpClient.post(ApiUrlEnum.UPLOAD_ALBUM.getUrl(), requestBody, callback);
     }
 }
