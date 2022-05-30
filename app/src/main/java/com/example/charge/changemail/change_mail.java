@@ -44,12 +44,12 @@ public class change_mail extends AppCompatActivity {
         OnClick();
     }
     private void OnClick(){
-        mail_getVerify.setOnClickListener(view -> send(mail_new_mail.getText().toString()));
+        mail_getVerify.setOnClickListener(view -> send(mail_old_mail.getText().toString()));
         mail_reset.setOnClickListener(view -> update_mail(mail_old_mail.getText().toString(),mail_new_mail.getText().toString(),mail_verify.getText().toString()));
     }
 
     public void update_mail(String oldMail, String newMail, String code) {
-        LogUtils.i(TAG, String.format("oldMail -> %s, code -> %s, newMail -> %s", oldMail, newMail,code));
+        LogUtils.i(TAG, String.format("oldMail -> %s, code -> %s, newMail -> %s", oldMail, code,newMail));
         // show loading dialog
         showLoading();
         Api.changeMail(oldMail, newMail,code,new Callback() {
@@ -87,7 +87,7 @@ public class change_mail extends AppCompatActivity {
                     });
 
                 } else {
-                    LogUtils.e(TAG, "ChangePwd().onResponse: response.body() == null");
+                    LogUtils.e(TAG, "ChangeMail().onResponse: response.body() == null");
                 }
 
             }
