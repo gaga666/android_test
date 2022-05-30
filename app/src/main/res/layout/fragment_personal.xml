@@ -3,14 +3,45 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".fragment.personalFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:id="@+id/bar_personal_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="25dp"
-        android:layout_gravity="center"
-        android:text="个人" />
+<!--    <TextView-->
+<!--        android:id="@+id/bar_personal_text"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:textSize="25dp"-->
+<!--        android:layout_gravity="center"-->
+<!--        android:text="个人" />-->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp">
+            <ImageView
+                android:id="@+id/personal_head"
+                android:layout_width="100dp"
+                android:src="@drawable/username"
+                android:layout_height="100dp"/>
+
+            <TextView
+                android:id="@+id/personal_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:textColor="@color/black"
+                android:text="id"
+                android:layout_gravity="center_vertical"
+                android:textSize="50sp" />
+
+        </LinearLayout>
+
+        <ListView
+            android:id="@+id/personal_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="100dp" />
+    </RelativeLayout>
 </FrameLayout>

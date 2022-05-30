@@ -13,28 +13,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
-<!--        <androidx.viewpager.widget.ViewPager-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="50dp"/>-->
-
-<!--                <RadioGroup-->
-<!--                    android:id="@+id/inter_radioGroup"-->
-<!--                    android:layout_width="fill_parent"-->
-<!--                    android:layout_height="50dp"-->
-<!--                    android:gravity="center_vertical"-->
-<!--                    android:layout_alignParentBpttom= "true"-->
-<!--                    android:orientation="horizontal">-->
-
-<!--                        <RadioButton-->
-<!--                            android:id="@+id/inter_radio_message"-->
-<!--                            android:layout_width="match_parent"-->
-<!--                            android:layout_height="50dp"-->
-<!--                            android:layout_weight="1"/>-->
-
-
-
-<!--                </RadioGroup>-->
-
 
 
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

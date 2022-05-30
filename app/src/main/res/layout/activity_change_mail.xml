@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".changemail.change_mail">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="40dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginBottom="40dp"
+            android:layout_marginRight="40dp">
+
+
+            <EditText
+                android:id="@+id/mail_old_mail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:theme="@style/CardView.Light"
+                android:drawableLeft="@drawable/e_mail"
+                android:drawablePadding="5dp"
+                android:hint="请输入旧邮箱"
+                android:maxLines="1" />
+
+            <Button
+                android:id="@+id/mail_getVerify"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:text="获取验证码"
+                android:textSize="18sp"
+                android:textColor="@color/white"
+                android:background="#1E90FF"/>
+
+
+            <EditText
+                android:id="@+id/mail_new_mail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:theme="@style/CardView.Light"
+                android:drawableLeft="@drawable/e_mail"
+                android:drawablePadding="5dp"
+                android:hint="请输入新邮箱"
+                android:maxLines="1" />
+
+            <EditText
+                android:id="@+id/mail_verify"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:theme="@style/CardView.Light"
+                android:drawableLeft="@drawable/verify"
+                android:drawablePadding="5dp"
+                android:hint="请输入验证码"
+                android:maxLines="1" />
+
+            <Button
+                android:id="@+id/mail_reset"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:text="重置"
+                android:textSize="18sp"
+                android:textColor="@color/white"
+                android:background="#1E90FF"/>
+        </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>

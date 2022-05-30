@@ -28,7 +28,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Type;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -112,6 +111,7 @@ public class uses_head extends AppCompatActivity {
                 }
             }
         });
+        file.delete();
     }
 
     /**

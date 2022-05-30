@@ -7,6 +7,8 @@ import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.charge.changemail.change_mail;
+
 public class First extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,7 +28,7 @@ public class First extends AppCompatActivity {
         first_cal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(First.this,maininterface.class);
+                Intent i = new Intent(First.this, change_mail.class);
                 startActivity(i);
                 overridePendingTransition(0,0);
             }

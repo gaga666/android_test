@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.charge">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -17,6 +18,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Charge">
+        <activity
+            android:name=".changemail.change_mail"
+            android:exported="false" />
         <activity
             android:name=".BottomBar"
             android:exported="false" />
@@ -38,6 +42,10 @@
         <activity
             android:name=".calendar"
             android:exported="false" />
+        <activity
+            android:name=".changemail.change_mail"
+            android:exported="false"
+            tools:ignore="DuplicateActivity" />
         <activity
             android:name=".signup.Register"
             android:exported="false"

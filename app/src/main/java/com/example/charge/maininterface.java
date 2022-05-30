@@ -40,7 +40,7 @@ public class maininterface extends AppCompatActivity {
             Map<String,Object> map = new HashMap<>();
             map.put("list_image",list_image[i]);
             map.put("list_text1",list_text1[i]);
-            map.put("list_text2",list_text2[i]);
+//            map.put("list_text2",list_text2[i]);
             lists.add(map);
         }
         /**
@@ -50,7 +50,7 @@ public class maininterface extends AppCompatActivity {
                 ,lists
                 ,R.layout.list
                 ,new String[]{"list_image","list_text1","list_text2"}
-                , new int[]{R.id.list_image,R.id.list_text1,R.id.list_text2});
+                , new int[]{R.id.list_image,R.id.list_text1});
         ListView listView = (ListView) findViewById(R.id.inter_listview);
         listView.setAdapter(adapter);
     }

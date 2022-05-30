@@ -4,13 +4,13 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.charge.R;
 
@@ -39,8 +39,8 @@ public class homeFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    private TextView bar_home_text;
-    private SwipeRefreshLayout home_refresh;
+    private TextView home_list_text1,home_list_text2;
+    private ImageView home_list_image;
     public homeFragment() {
         // Required empty public constructor
     }
@@ -84,7 +84,5 @@ public class homeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-//        bar_home_text = view.findViewById(R.id.bar_home_text);
-        home_refresh = view.findViewById(R.id.home_refresh);
     }
 }
