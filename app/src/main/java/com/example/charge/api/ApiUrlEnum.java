@@ -12,14 +12,17 @@ public enum ApiUrlEnum {
     /** 发送邮件验证码 */
     SEND_MAIL("passport/mail/send"),
 
+    /** 上传图片 */
+    UPLOAD_ALBUM("generic/fs/upload_album"),
+
     /** 更换密码 */
-    CHANGE_PWD("passport/change/pwd"),
+    CHANGE_PWD("space/change/pwd"),
 
     /** 换绑邮箱 */
-    CHANGE_MAIL("passport/change/mail"),
+    CHANGE_MAIL("space/change/mail"),
 
-    /** 上传图片 */
-    UPLOAD_ALBUM("generic/fs/upload_album");
+    /** 获取用户信息 */
+    GET_USER_INFO("space/acc/info");
 
     private final String url;
 
