@@ -3,6 +3,7 @@ package com.example.charge.api;
 import androidx.annotation.NonNull;
 
 public enum ApiUrlEnum {
+    
     /** 注册 */
     SIGNUP("passport/signup"),
 
