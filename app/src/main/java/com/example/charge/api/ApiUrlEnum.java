@@ -13,10 +13,10 @@ public enum ApiUrlEnum {
     SEND_MAIL("passport/mail/send"),
 
     /** 更换密码 */
-    CHANGE_PWD("passport/change/pwd"),
+    CHANGE_PWD("space/change/pwd"),
 
     /** 换绑邮箱 */
-    CHANGE_MAIL("passport/change/mail"),
+    CHANGE_MAIL("space/change/mail"),
 
     /** 上传图片 */
     UPLOAD_ALBUM("generic/fs/upload_album");
