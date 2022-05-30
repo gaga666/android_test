@@ -17,7 +17,7 @@ public class First extends AppCompatActivity {
         first_main.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i =new Intent(First.this,maininterface.class);
+                Intent i =new Intent(First.this,BottomBar.class);
                 startActivity(i);
                 overridePendingTransition(0,0);
             }
@@ -26,7 +26,7 @@ public class First extends AppCompatActivity {
         first_cal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(First.this,calendar.class);
+                Intent i = new Intent(First.this,maininterface.class);
                 startActivity(i);
                 overridePendingTransition(0,0);
             }
