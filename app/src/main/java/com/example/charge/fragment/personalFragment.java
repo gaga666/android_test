@@ -1,5 +1,6 @@
 package com.example.charge.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.charge.R;
+import com.example.charge.changemail.change_mail;
+import com.example.charge.resetpassword;
+import com.example.charge.uses_head;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -76,7 +80,25 @@ public class personalFragment extends Fragment implements AdapterView.OnItemClic
         simpleAdapter = new SimpleAdapter(getActivity(),getData(),R.layout.list,new String[]{"title","image"},new int[]{R.id.list_text1,R.id.list_image});
         listView.setAdapter(simpleAdapter);
 
-        listView.setOnItemClickListener(this);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                switch (i){
+                    case 0:
+                        Intent intent = new Intent(getActivity(), uses_head.class);
+                        startActivity(intent);
+                        break;
+                    case 1:
+                        Intent intent1 = new Intent(getActivity(), resetpassword.class);
+                        startActivity(intent1);
+                        break;
+                    case 2:
+                        Intent intent2 = new Intent(getActivity(), change_mail.class);
+                        startActivity(intent2);
+                        break;
+                }
+            }
+        });
         return view;
 
     }
