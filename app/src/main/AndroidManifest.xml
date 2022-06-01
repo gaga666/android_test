@@ -19,6 +19,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Charge">
         <activity
+            android:name=".search"
+            android:exported="false" />
+        <activity
             android:name=".changemail.change_mail"
             android:exported="false" />
         <activity
@@ -41,11 +44,10 @@
             android:exported="false" />
         <activity
             android:name=".calendar"
-            android:exported="false" />
-<!--        <activity-->
-<!--            android:name=".changemail.change_mail"-->
-<!--            android:exported="false"-->
-<!--            tools:ignore="DuplicateActivity" />-->
+            android:exported="false" /> <!-- <activity -->
+        <!-- android:name=".changemail.change_mail" -->
+        <!-- android:exported="false" -->
+        <!-- tools:ignore="DuplicateActivity" /> -->
         <activity
             android:name=".signup.Register"
             android:exported="false"
