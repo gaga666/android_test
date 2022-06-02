@@ -69,6 +69,5 @@ public class addFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        bar_add_text = view.findViewById(R.id.bar_add_text);
     }
 }

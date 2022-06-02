@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment;
 import com.example.charge.R;
 import com.example.charge.changemail.change_mail;
 import com.example.charge.resetpassword;
+import com.example.charge.search;
 import com.example.charge.uses_head;
 
 import java.util.ArrayList;
@@ -96,6 +97,10 @@ public class personalFragment extends Fragment implements AdapterView.OnItemClic
                         Intent intent2 = new Intent(getActivity(), change_mail.class);
                         startActivity(intent2);
                         break;
+                    case 3:
+                        Intent intent3 = new Intent(getActivity(), search.class);
+                        startActivity(intent3);
+                        break;
                 }
             }
         });
@@ -104,10 +109,10 @@ public class personalFragment extends Fragment implements AdapterView.OnItemClic
     }
 
     private List<Map<String,Object>> getData(){
-        String[] titles = {"修改头像","修改密码","修改邮箱"};
-        int[] images = {R.drawable.username,R.drawable.password,R.drawable.e_mail};
+        String[] titles = {"修改头像","修改密码","修改邮箱","搜索"};
+        int[] images = {R.drawable.username,R.drawable.password,R.drawable.e_mail,R.drawable.search};
         List<Map<String,Object>> list=new ArrayList<>();
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 4; i++) {
             Map map =new HashMap();
             map.put("image",images[i]);
             map.put("title",titles[i]);
