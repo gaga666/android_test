@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
@@ -13,10 +14,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
 import com.example.charge.R;
 import com.example.charge.changemail.change_mail;
 import com.example.charge.resetpassword;
 import com.example.charge.search;
+import com.example.charge.signup.Register;
 import com.example.charge.uses_head;
 
 import java.util.ArrayList;
@@ -32,7 +35,7 @@ import java.util.Map;
 public class personalFragment extends Fragment implements AdapterView.OnItemClickListener {
     ListView listView;
     SimpleAdapter simpleAdapter;
-    private String[] data = {"修改头像","修改密码","修改邮箱","切换用户","注册用户"};
+    ImageView personal_head;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -76,8 +79,10 @@ public class personalFragment extends Fragment implements AdapterView.OnItemClic
                              Bundle savedInstanceState) {
 //         Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_personal, container,false);
-        listView = view.findViewById(R.id.personal_view);
+        personal_head = view.findViewById(R.id.personal_head);
+        Glide.with(getActivity()).load("http://s0.objectspace.top/fs/face/noface.jpg").into(personal_head);
 
+        listView = view.findViewById(R.id.personal_view);
         simpleAdapter = new SimpleAdapter(getActivity(),getData(),R.layout.list,new String[]{"title","image"},new int[]{R.id.list_text1,R.id.list_image});
         listView.setAdapter(simpleAdapter);
 
@@ -101,6 +106,10 @@ public class personalFragment extends Fragment implements AdapterView.OnItemClic
                         Intent intent3 = new Intent(getActivity(), search.class);
                         startActivity(intent3);
                         break;
+                    case 4:
+                        Intent intent4 = new Intent(getActivity(), Register.class);
+                        startActivity(intent4);
+                        break;
                 }
             }
         });
@@ -109,10 +118,10 @@ public class personalFragment extends Fragment implements AdapterView.OnItemClic
     }
 
     private List<Map<String,Object>> getData(){
-        String[] titles = {"修改头像","修改密码","修改邮箱","搜索"};
-        int[] images = {R.drawable.username,R.drawable.password,R.drawable.e_mail,R.drawable.search};
+        String[] titles = {"修改头像","修改密码","修改邮箱","搜索","注册新账号"};
+        int[] images = {R.drawable.username,R.drawable.password,R.drawable.e_mail,R.drawable.search,R.drawable.username};
         List<Map<String,Object>> list=new ArrayList<>();
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 5; i++) {
             Map map =new HashMap();
             map.put("image",images[i]);
             map.put("title",titles[i]);

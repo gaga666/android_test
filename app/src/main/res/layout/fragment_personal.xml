@@ -23,7 +23,6 @@
             <ImageView
                 android:id="@+id/personal_head"
                 android:layout_width="100dp"
-                android:src="@drawable/username"
                 android:layout_height="100dp"/>
 
             <TextView

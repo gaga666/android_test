@@ -7,8 +7,8 @@
     <TextView
         android:id="@+id/search_list_text"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="35dp"
         tools:ignore="MissingConstraints"
-        android:textSize="12sp"/>
+        android:textSize="30sp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

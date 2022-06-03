@@ -1,11 +1,8 @@
 package com.example.charge;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.viewpager.widget.ViewPager;
-
-import android.content.Intent;
-import android.os.Bundle;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -13,6 +10,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
 
 import java.util.ArrayList;
 
@@ -37,7 +37,7 @@ public class LoopView extends AppCompatActivity {
         loop_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i =new Intent(LoopView.this,First.class);
+                Intent i =new Intent(LoopView.this,BottomBar.class);
                 startActivity(i);
                 overridePendingTransition(0,0);
             }
@@ -162,19 +162,39 @@ class pagerOnClickListener implements View.OnClickListener{
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.pager_img1:
-                Toast.makeText(mContext, "关注啵啵小狗ww哞", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, "关注啵叽王子哞", Toast.LENGTH_SHORT).show();
+                Uri uri = Uri.parse("https://space.bilibili.com/33605910/");
+                Intent intent = new Intent(Intent.ACTION_VIEW,uri);
+//                intent.setClass(mContext,LoopView.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                mContext.startActivity(intent);
                 break;
             case R.id.pager_img2:
                 Toast.makeText(mContext, "关注风妤_嘟嘟嘟哞", Toast.LENGTH_SHORT).show();
+                Uri uri1 = Uri.parse("https://space.bilibili.com/21969983/");
+                Intent intent1 = new Intent(Intent.ACTION_VIEW,uri1);
+//                intent1.setClass(mContext,LoopView.class);
+                intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                mContext.startActivity(intent1);
                 break;
             case R.id.pager_img3:
                 Toast.makeText(mContext, "关注小粒Q_Channel哞", Toast.LENGTH_SHORT).show();
+                Uri uri2 = Uri.parse("https://space.bilibili.com/482480476/");
+                Intent intent2 = new Intent(Intent.ACTION_VIEW,uri2);
+//                intent2.setClass(mContext,LoopView.class);
+                intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                mContext.startActivity(intent2);
                 break;
             case R.id.pager_img4:
                 Toast.makeText(mContext, "暂时无", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.pager_img5:
                 Toast.makeText(mContext, "关注小K_KL哞", Toast.LENGTH_SHORT).show();
+                Uri uri3 = Uri.parse("https://space.bilibili.com/16476038/");
+                Intent intent3 = new Intent(Intent.ACTION_VIEW,uri3);
+//                intent3.setClass(mContext,LoopView.class);
+                intent3.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                mContext.startActivity(intent3);
                 break;
         }
     }

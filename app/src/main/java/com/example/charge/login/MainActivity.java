@@ -10,12 +10,14 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.example.charge.LoopView;
 import com.example.charge.R;
 import com.example.charge.api.remote.Api;
@@ -37,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
 
     // loading dialog
     private LoadingDialog mLoadingDialog;
-
+    private ImageView lg_userIcon;
     private EditText lg_username,lg_password;
     private TextView lg_forgetPsd;
     private CheckBox lg_rememberPsd;
@@ -57,6 +59,9 @@ public class MainActivity extends AppCompatActivity {
 
         lg_username =  findViewById(R.id.lg_username);
         lg_password =  findViewById(R.id.lg_password);
+        lg_userIcon = findViewById(R.id.lg_userIcon);
+        Glide.with(this).load("http://s0.objectspace.top/fs/face/noface.jpg").into(lg_userIcon);
+
         Button lg_login =  findViewById(R.id.lg_login);
         lg_login.setOnClickListener(view -> getUser());
         lg_forgetPsd = findViewById(R.id.lg_forgetPsd);

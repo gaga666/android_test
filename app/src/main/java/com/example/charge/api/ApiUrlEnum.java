@@ -20,7 +20,10 @@ public enum ApiUrlEnum {
     CHANGE_MAIL("space/change/mail"),
 
     /** 上传图片 */
-    UPLOAD_ALBUM("generic/fs/upload_album");
+    UPLOAD_ALBUM("generic/fs/upload_album"),
+
+    /** 获取用户信息 */
+    GET_USER_INFO("space/acc/info?uid=");
 
     private final String url;
 

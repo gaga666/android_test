@@ -26,7 +26,6 @@ public class search extends AppCompatActivity {
         initView();
     }
     private void initView(){
-        search_search = findViewById(R.id.search_search);
         search_edit = findViewById(R.id.search_edit);
         search_list = findViewById(R.id.search_list);
         simpleAdapter = new SimpleAdapter(this,getData(),R.layout.search_list,new String[]{"text"},new int[]{R.id.search_list_text});

@@ -18,8 +18,7 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_centerHorizontal="true"
-            android:scaleType="fitCenter"
-            android:src="@drawable/english" />
+            android:scaleType="fitCenter" />
 
         <EditText
             android:id="@+id/lg_username"

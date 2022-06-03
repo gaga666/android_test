@@ -1,6 +1,5 @@
 package com.example.charge.api.remote;
 
-import android.net.Uri;
 import android.webkit.MimeTypeMap;
 
 import com.example.charge.api.ApiHttpClient;
@@ -88,5 +87,11 @@ public class Api {
                 .build();
 
         ApiHttpClient.post(ApiUrlEnum.UPLOAD_ALBUM.getUrl(), requestBody, callback);
+    }
+
+    public static void getUserInfo(String uid,Callback callback){
+        Map<String,String> params = new HashMap<>(1);
+        params.put("uid",uid);
+        ApiHttpClient.post(ApiUrlEnum.GET_USER_INFO.getUrl(), params,callback);
     }
 }

@@ -13,15 +13,9 @@
         <android.widget.SearchView
             android:id="@+id/search_edit"
             android:layout_width="0dp"
-            android:layout_weight="8"
+            android:layout_weight="1"
             android:layout_height="wrap_content" />
 
-        <ImageView
-            android:id="@+id/search_search"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:src="@drawable/search_small"
-            android:layout_weight="2"/>
     </LinearLayout>
     <ListView
         android:id="@+id/search_list"
