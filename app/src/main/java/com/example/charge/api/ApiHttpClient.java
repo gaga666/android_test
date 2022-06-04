@@ -73,12 +73,12 @@ public class ApiHttpClient {
         return url;
     }
 
-    public static void get(String partUrl, Callback callback) {
+    public static void get(String partUrl, Headers headers, Callback callback) {
         // no query parameter
-        get(partUrl, null, callback);
+        get(partUrl, null, null, callback);
     }
 
-    public static void get(String partUrl, Map<String, String> params, Callback callback) {
+    public static void get(String partUrl, Map<String, String> params, Headers headers, Callback callback) {
         HttpUrl.Builder urlBuilder = HttpUrl.parse(getAbsoluteApiUrl(partUrl)).newBuilder();
         // add query parameters if any
         if (params != null) {
@@ -86,38 +86,48 @@ public class ApiHttpClient {
                 urlBuilder.addQueryParameter(param.getKey(), param.getValue());
             }
         }
-        Request request = new Request.Builder()
+        Request.Builder builder = new Request.Builder();
+
+        if (headers != null) {
+            builder.headers(headers);
+        }
+
+        Request request = builder
                 .url(urlBuilder.build())
+                // method GET
                 .get()
                 .build();
         CLIENT.newCall(request).enqueue(callback);
         log("GET " + partUrl + "?" + params);
     }
 
-    public static void post(String partUrl, Map<String, String> params, Callback callback) {
+    public static RequestBody encodeFormBody(Map<String, String> params) {
         FormBody.Builder formBodyBuilder = new FormBody.Builder();
         if (params != null) {
             for (Map.Entry<String, String> param : params.entrySet()) {
                 formBodyBuilder.add(param.getKey(), param.getValue());
             }
         }
-        Request request = new Request.Builder()
-                .url(getAbsoluteApiUrl(partUrl))
-                .addHeader("Content-Type", POST_CONTENT_TYPE)
-                .post(formBodyBuilder.build())
-                .build();
-        CLIENT.newCall(request).enqueue(callback);
-        log("POST " + partUrl + "?" + params);
+        return formBodyBuilder.build();
     }
 
-    public static void post(String partUrl, RequestBody requestBody, Callback callback) {
-        Request request = new Request.Builder()
+    public static void post(String partUrl, Map<String, String> params, Headers headers, Callback callback) {
+        post(partUrl, encodeFormBody(params), headers, callback);
+    }
+
+    public static void post(String partUrl, RequestBody requestBody, Headers headers, Callback callback) {
+        Request.Builder builder = new Request.Builder();
+
+        if (headers != null) {
+            builder.headers(headers);
+        }
+
+        Request request = builder
                 .url(getAbsoluteApiUrl(partUrl))
+                // method POST
                 .post(requestBody)
                 .build();
         CLIENT.newCall(request).enqueue(callback);
         log("POST " + partUrl + "?" + requestBody);
     }
-
-
 }

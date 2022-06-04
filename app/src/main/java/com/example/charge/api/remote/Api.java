@@ -11,12 +11,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.Headers;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import okhttp3.internal.http.HttpHeaders;
 
 public class Api {
 
+    private static final String HEADER_AUTHORIZATION = "Authorization";
 
     public static void signup(String username, String password, String mail, String code,
                               Callback callback) {
@@ -25,7 +29,7 @@ public class Api {
         params.put("password", password);
         params.put("mail", mail);
         params.put("code", code);
-        ApiHttpClient.post(ApiUrlEnum.SIGNUP.getUrl(), params, callback);
+        ApiHttpClient.post(ApiUrlEnum.SIGNUP.getUrl(), params, null, callback);
     }
 
     public static void register(String username, String password, String mail, String code,
@@ -33,18 +37,19 @@ public class Api {
         signup(username, password, mail, code, callback);
     }
 
-    public static void login(String username, String password, Callback callback) {
+    public static void login(String username, String password,
+                             Callback callback) {
         Map<String, String> params = new HashMap<>(2);
         params.put("username", username);
         params.put("password", password);
-        ApiHttpClient.post(ApiUrlEnum.LOGIN.getUrl(), params, callback);
+        ApiHttpClient.post(ApiUrlEnum.LOGIN.getUrl(), params, null, callback);
     }
 
     public static void sendMail(String mail, int type, Callback callback) {
         Map<String, String> params = new HashMap<>(2);
         params.put("mail", mail);
         params.put("type", "" + type);
-        ApiHttpClient.post(ApiUrlEnum.SEND_MAIL.getUrl(), params, callback);
+        ApiHttpClient.post(ApiUrlEnum.SEND_MAIL.getUrl(), params, null, callback);
     }
 
     public static void changePwd(String newPwd, String mail, String code,
@@ -53,7 +58,7 @@ public class Api {
         params.put("new_pwd", newPwd);
         params.put("mail", mail);
         params.put("code", code);
-        ApiHttpClient.post(ApiUrlEnum.CHANGE_PWD.getUrl(), params, callback);
+        ApiHttpClient.post(ApiUrlEnum.CHANGE_PWD.getUrl(), params, null, callback);
     }
 
     public static void changeMail(String oldMail, String newMail, String code,
@@ -62,7 +67,11 @@ public class Api {
         params.put("old_mail", oldMail);
         params.put("new_mail", newMail);
         params.put("code", code);
-        ApiHttpClient.post(ApiUrlEnum.CHANGE_MAIL.getUrl(), params, callback);
+
+        // TODO
+//        Headers headers = new Headers.Builder()
+//                .add("Authorization", )
+        ApiHttpClient.post(ApiUrlEnum.CHANGE_MAIL.getUrl(), params, null, callback);
     }
 
     public static void uploadImage(File file, Callback callback) {
@@ -79,19 +88,32 @@ public class Api {
         LogUtils.log("extension -> " + extension);
         LogUtils.log("mimeType -> " + mimeType);
 
-        RequestBody fileBody = RequestBody.create(file, MediaType.parse(mimeType));
+        RequestBody fileBody = MultipartBody.create(file, MediaType.parse(mimeType));
 
         RequestBody requestBody = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
                 .addFormDataPart("file_up", filename, fileBody)
                 .build();
 
-        ApiHttpClient.post(ApiUrlEnum.UPLOAD_ALBUM.getUrl(), requestBody, callback);
+        ApiHttpClient.post(ApiUrlEnum.UPLOAD_ALBUM.getUrl(), requestBody, null, callback);
     }
 
-    public static void getUserInfo(String uid,Callback callback){
-        Map<String,String> params = new HashMap<>(1);
-        params.put("uid",uid);
-        ApiHttpClient.post(ApiUrlEnum.GET_USER_INFO.getUrl(), params,callback);
+    public static void getUserInfoByUid(Long uid, Callback callback) {
+        Map<String, String> params = new HashMap<>(1);
+        params.put("uid", "" + uid);
+        ApiHttpClient.get(ApiUrlEnum.GET_USER_INFO.getUrl(), params, null, callback);
+    }
+
+    public static void getUserInfoByUsername(String username, Callback callback) {
+        Map<String, String> params = new HashMap<>(1);
+        params.put("uname", username);
+        ApiHttpClient.get(ApiUrlEnum.GET_USER_INFO.getUrl(), params, null, callback);
+    }
+
+    public static void getMyInfo(String accessToken, final String tokenType, Callback callback) {
+        Headers headers = new Headers.Builder()
+                .add(HEADER_AUTHORIZATION, tokenType + " " + accessToken)
+                .build();
+        ApiHttpClient.get(ApiUrlEnum.GET_MY_INFO.getUrl(), headers, callback);
     }
 }

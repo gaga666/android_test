@@ -2,13 +2,18 @@ package com.example.charge.entity;
 
 import androidx.annotation.NonNull;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class ImageInfo {
 
-    private int imageWidth = 0;
+    @JsonProperty("image_width")
+    private int imageWidth;
 
-    private int imageHeight = 0;
+    @JsonProperty("image_height")
+    private int imageHeight;
 
-    private String imageUrl = "";
+    @JsonProperty("image_url")
+    private String imageUrl;
 
     public int getImageWidth() {
         return imageWidth;
