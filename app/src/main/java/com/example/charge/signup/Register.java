@@ -13,7 +13,7 @@ import com.example.charge.R;
 import com.example.charge.api.remote.Api;
 import com.example.charge.e_mail;
 import com.example.charge.entity.MessageResponse;
-import com.example.charge.login.MainActivity;
+import com.example.charge.login.LoginActivity;
 import com.example.charge.utils.LogUtils;
 import com.example.charge.view.LoadingDialog;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -143,7 +143,7 @@ public class Register extends AppCompatActivity {
                         public void run() {
                             Toast.makeText(Register.this, message, Toast.LENGTH_SHORT).show();
                             if (code == 0) {
-                                Intent i = new Intent(Register.this, MainActivity.class);
+                                Intent i = new Intent(Register.this, LoginActivity.class);
                                 startActivity(i);
                                 overridePendingTransition(0, 0);
                             }

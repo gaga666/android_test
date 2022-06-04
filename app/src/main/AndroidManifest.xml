@@ -61,9 +61,9 @@
         <activity
             android:name=".signup.Register"
             android:exported="false"
-            android:parentActivityName=".login.MainActivity" />
+            android:parentActivityName=".login.LoginActivity" />
         <activity
-            android:name=".login.MainActivity"
+            android:name=".login.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

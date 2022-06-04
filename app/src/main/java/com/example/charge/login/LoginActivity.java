@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.text.method.PasswordTransformationMethod;
 import android.text.method.TransformationMethod;
 import android.view.View;
@@ -41,8 +39,8 @@ import okhttp3.Callback;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
-public class MainActivity extends AppCompatActivity {
-    private static final String TAG = MainActivity.class.getName();
+public class LoginActivity extends AppCompatActivity {
+    private static final String TAG = LoginActivity.class.getName();
 
     // loading dialog
     private LoadingDialog mLoadingDialog;
@@ -85,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
         lg_login.setOnClickListener(view -> getUser());
         lg_forgetPsd = findViewById(R.id.lg_forgetPsd);
         lg_forgetPsd.setOnClickListener(view -> {
-            Intent i = new Intent(MainActivity.this, resetpassword.class);
+            Intent i = new Intent(LoginActivity.this, resetpassword.class);
             startActivity(i);
             overridePendingTransition(0,0);
         });
@@ -96,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
          */
         TextView lg_textView =  findViewById(R.id.lg_textview);
         lg_textView.setOnClickListener(view -> {
-            Intent i = new Intent(MainActivity.this, Register.class);
+            Intent i = new Intent(LoginActivity.this, Register.class);
             startActivity(i);
             overridePendingTransition(0,0);
         });
@@ -165,6 +163,7 @@ public class MainActivity extends AppCompatActivity {
         Api.getUserInfoByUsername(username, new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                LogUtils.e(TAG, e.toString());
             }
 
             @Override
@@ -255,7 +254,7 @@ public class MainActivity extends AppCompatActivity {
                     // get response code
                     int code = res.getCode();
                     // get response message
-                    String message = res.toString();
+                    String message = res.getMessage();
                     LogUtils.i(TAG,
                             String.format("login().onResponse: res.code -> %s, res.message -> %s", code, message)
                     );
@@ -266,9 +265,9 @@ public class MainActivity extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LoginActivity.this, message, Toast.LENGTH_SHORT).show();
                             if (code == 0) {
-                                Intent i = new Intent(MainActivity.this, LoopView.class);
+                                Intent i = new Intent(LoginActivity.this, LoopView.class);
                                 startActivity(i);
                                 overridePendingTransition(0, 0);
                             }

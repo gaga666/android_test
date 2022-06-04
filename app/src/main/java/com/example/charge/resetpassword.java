@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.charge.api.remote.Api;
 import com.example.charge.entity.MessageResponse;
-import com.example.charge.login.MainActivity;
+import com.example.charge.login.LoginActivity;
 import com.example.charge.utils.LogUtils;
 import com.example.charge.view.LoadingDialog;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -87,7 +87,7 @@ public class resetpassword extends AppCompatActivity {
                         public void run() {
                             Toast.makeText(resetpassword.this, message, Toast.LENGTH_SHORT).show();
                             if (code == 0) {
-                                Intent i = new Intent(resetpassword.this, MainActivity.class);
+                                Intent i = new Intent(resetpassword.this, LoginActivity.class);
                                 startActivity(i);
                                 overridePendingTransition(0, 0);
                             }

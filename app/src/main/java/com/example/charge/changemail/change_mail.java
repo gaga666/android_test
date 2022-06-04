@@ -13,7 +13,7 @@ import com.example.charge.R;
 import com.example.charge.api.remote.Api;
 import com.example.charge.e_mail;
 import com.example.charge.entity.MessageResponse;
-import com.example.charge.login.MainActivity;
+import com.example.charge.login.LoginActivity;
 import com.example.charge.utils.LogUtils;
 import com.example.charge.view.LoadingDialog;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -80,7 +80,7 @@ public class change_mail extends AppCompatActivity {
                     runOnUiThread(() -> {
                         Toast.makeText(change_mail.this, message, Toast.LENGTH_SHORT).show();
                         if (code == 0) {
-                            Intent i = new Intent(change_mail.this, MainActivity.class);
+                            Intent i = new Intent(change_mail.this, LoginActivity.class);
                             startActivity(i);
                             overridePendingTransition(0, 0);
                         }
