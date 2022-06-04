@@ -46,17 +46,23 @@ dependencies {
     // User Guide: https://developer.android.com/topic/libraries/architecture/lifecycle
     // Library: https://developer.android.com/jetpack/androidx/releases/lifecycle
     def lifecycle_version = "2.4.1"
-    // ViewModel
+    // Java language implementation:
     implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycle_version"
-    // LiveData
     implementation "androidx.lifecycle:lifecycle-livedata:$lifecycle_version"
+    // Kotlin:
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
 
     // Navigation component:
     // User Guide: https://developer.android.google.cn/guide/navigation
     // Library: https://developer.android.com/jetpack/androidx/releases/navigation
     def nav_version = "2.4.2"
+    // Java language implementation:
     implementation "androidx.navigation:navigation-fragment:$nav_version"
     implementation "androidx.navigation:navigation-ui:$nav_version"
+    // Kotlin:
+    implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
+    implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
 
     // Jackson JSON Processor
     def jackson_version = "2.13.3"
@@ -67,6 +73,7 @@ dependencies {
     // OkHttp3: https://square.github.io/okhttp/#releases
     def okhttp3_version = "4.9.3"
     implementation "com.squareup.okhttp3:okhttp:$okhttp3_version"
+
     // Okio: https://square.github.io/okio/#releases
     def okio_version = "3.1.0"
     implementation "com.squareup.okio:okio:$okio_version"
