@@ -22,6 +22,7 @@ import com.bumptech.glide.Glide;
 import com.example.charge.LoopView;
 import com.example.charge.R;
 import com.example.charge.api.remote.Api;
+import com.example.charge.common.Constants;
 import com.example.charge.entity.DataResponse;
 import com.example.charge.entity.TokenPairInfo;
 import com.example.charge.entity.UserInfo;
@@ -54,7 +55,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_login);
 
         initView();
 
@@ -80,7 +81,7 @@ public class LoginActivity extends AppCompatActivity {
         Glide.with(this).load("http://s0.objectspace.top/fs/avatar/no-avatar.jpg").into(lg_userIcon);
 
         Button lg_login =  findViewById(R.id.lg_login);
-        lg_login.setOnClickListener(view -> getUser());
+        lg_login.setOnClickListener(view -> login());
         lg_forgetPsd = findViewById(R.id.lg_forgetPsd);
         lg_forgetPsd.setOnClickListener(view -> {
             Intent i = new Intent(LoginActivity.this, resetpassword.class);
@@ -121,7 +122,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
-
 
     private void clearData() {
         sharedPreferences = getSharedPreferences("items",MODE_PRIVATE);
@@ -184,26 +184,26 @@ public class LoginActivity extends AppCompatActivity {
 
                     UserInfo userInfo = res.getData();
                     if (userInfo != null) {
-                        LogUtils.i(TAG, "login().onResponse: res.data -> "  + userInfo.toString());
+                        LogUtils.i(TAG, "login().onResponse: res.data -> "  + userInfo);
                         String avatar = userInfo.getAvatar();
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Glide.with(getApplicationContext()).load(avatar).into(lg_userIcon);
+                                Glide.with(LoginActivity.this)
+                                        .load(avatar)
+                                        .into(lg_userIcon);
                             }
                         });
                     } else {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Glide.with(getApplicationContext()).load("http://s0.objectspace.top/fs/avatar/no-avatar.jpg").into(lg_userIcon);
+                                Glide.with(LoginActivity.this)
+                                        .load("http://s0.objectspace.top/fs/avatar/no-avatar.jpg")
+                                        .into(lg_userIcon);
                             }
                         });
                     }
-
-
-
-
 
                 } else {
                     LogUtils.e(TAG, "login().onResponse: response.body() == null");
@@ -215,8 +215,7 @@ public class LoginActivity extends AppCompatActivity {
     /**
      * 判断登录信息
      */
-//    @SuppressLint("Range")
-    public void getUser() {
+    private void login() {
         String username = lg_username.getText().toString();
         String password = lg_password.getText().toString();
         LogUtils.i(TAG, String.format("username -> %s, password -> %s", username, password));
@@ -260,7 +259,8 @@ public class LoginActivity extends AppCompatActivity {
                     );
 
                     TokenPairInfo tokenPairInfo = res.getData();
-                    LogUtils.i(TAG, "login().onResponse: res.data -> "  + tokenPairInfo.toString());
+                    // 保存Token
+                    saveTokenPair(tokenPairInfo);
 
                     runOnUiThread(new Runnable() {
                         @Override
@@ -269,7 +269,8 @@ public class LoginActivity extends AppCompatActivity {
                             if (code == 0) {
                                 Intent i = new Intent(LoginActivity.this, LoopView.class);
                                 startActivity(i);
-                                overridePendingTransition(0, 0);
+//                                overridePendingTransition(0, 0);
+                                finish();
                             }
                         }
                     });
@@ -282,7 +283,17 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    public void showLoading() {
+    private void saveTokenPair(TokenPairInfo tokenPairInfo) {
+        SharedPreferences sp = getSharedPreferences(Constants.SP_NAME_TOKEN_PAIR, MODE_PRIVATE);
+
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString(Constants.KEY_TOKEN_TYPE, tokenPairInfo.getTokenType());
+        editor.putString(Constants.KEY_ACCESS_TOKEN, tokenPairInfo.getAccessToken());
+        editor.putString(Constants.KEY_REFRESH_TOKEN, tokenPairInfo.getRefreshToken());
+        editor.apply();
+    }
+
+    private void showLoading() {
         if (mLoadingDialog == null) {
             mLoadingDialog = new LoadingDialog(this);
             mLoadingDialog.setText("登录中...");
@@ -291,7 +302,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    public void stopLoading() {
+    private void stopLoading() {
         if (mLoadingDialog != null) {
             mLoadingDialog.dismiss();
         }

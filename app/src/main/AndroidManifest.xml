@@ -19,9 +19,22 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Charge"
         android:usesCleartextTraffic="true">
+
         <activity
-            android:name=".Welcome"
+            android:name=".splashscreen.SplashScreen"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".login.LoginActivity"
             android:exported="true" />
+        <activity
+            android:name=".signup.Register"
+            android:exported="false"
+            android:parentActivityName=".login.LoginActivity" />
         <activity
             android:name=".home2"
             android:exported="false" />
@@ -58,19 +71,7 @@
         <!-- android:name=".changemail.change_mail" -->
         <!-- android:exported="false" -->
         <!-- tools:ignore="DuplicateActivity" /> -->
-        <activity
-            android:name=".signup.Register"
-            android:exported="false"
-            android:parentActivityName=".login.LoginActivity" />
-        <activity
-            android:name=".login.LoginActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
     </application>
 
 </manifest>
