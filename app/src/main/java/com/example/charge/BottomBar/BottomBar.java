@@ -1,4 +1,4 @@
-package com.example.charge;
+package com.example.charge.BottomBar;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.charge.R;
 import com.example.charge.fragment.addFragment;
 import com.example.charge.fragment.homeFragment;
 import com.example.charge.fragment.personalFragment;

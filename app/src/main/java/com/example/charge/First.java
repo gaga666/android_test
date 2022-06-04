@@ -7,6 +7,7 @@ import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.charge.BottomBar.BottomBar;
 import com.example.charge.changemail.change_mail;
 
 public class First extends AppCompatActivity {
@@ -19,7 +20,7 @@ public class First extends AppCompatActivity {
         first_main.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i =new Intent(First.this,BottomBar.class);
+                Intent i =new Intent(First.this, BottomBar.class);
                 startActivity(i);
                 overridePendingTransition(0,0);
             }

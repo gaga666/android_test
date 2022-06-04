@@ -11,14 +11,23 @@
     <uses-permission android:name="android.permission.CAMERA" />
 
     <application
-        android:usesCleartextTraffic="true"
         android:name=".MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Charge">
+        android:theme="@style/Theme.Charge"
+        android:usesCleartextTraffic="true">
+        <activity
+            android:name=".Welcome"
+            android:exported="true" />
+        <activity
+            android:name=".home2"
+            android:exported="false" />
+        <activity
+            android:name=".home1"
+            android:exported="false" />
         <activity
             android:name=".search"
             android:exported="false" />
@@ -26,7 +35,7 @@
             android:name=".changemail.change_mail"
             android:exported="false" />
         <activity
-            android:name=".BottomBar"
+            android:name=".BottomBar.BottomBar"
             android:exported="false" />
         <activity
             android:name=".uses_head"

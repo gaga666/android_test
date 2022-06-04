@@ -14,6 +14,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
+import com.example.charge.BottomBar.BottomBar;
+
 import java.util.ArrayList;
 
 public class LoopView extends AppCompatActivity {
@@ -37,7 +39,7 @@ public class LoopView extends AppCompatActivity {
         loop_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i =new Intent(LoopView.this,BottomBar.class);
+                Intent i =new Intent(LoopView.this, BottomBar.class);
                 startActivity(i);
                 overridePendingTransition(0,0);
             }
