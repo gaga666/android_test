@@ -4,8 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.text.method.PasswordTransformationMethod;
 import android.text.method.TransformationMethod;
+import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -21,11 +24,14 @@ import com.bumptech.glide.Glide;
 import com.example.charge.LoopView;
 import com.example.charge.R;
 import com.example.charge.api.remote.Api;
-import com.example.charge.entity.MessageResponse;
+import com.example.charge.entity.DataResponse;
+import com.example.charge.entity.TokenPairInfo;
+import com.example.charge.entity.UserInfo;
 import com.example.charge.resetpassword;
 import com.example.charge.signup.Register;
 import com.example.charge.utils.LogUtils;
 import com.example.charge.view.LoadingDialog;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
@@ -33,6 +39,7 @@ import java.io.IOException;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getName();
@@ -40,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
     // loading dialog
     private LoadingDialog mLoadingDialog;
     private ImageView lg_userIcon;
-    private EditText lg_username,lg_password;
+    private EditText lg_username, lg_password;
     private TextView lg_forgetPsd;
     private CheckBox lg_rememberPsd;
     private SharedPreferences sharedPreferences;
@@ -58,9 +65,21 @@ public class MainActivity extends AppCompatActivity {
     private void initView() {
 
         lg_username =  findViewById(R.id.lg_username);
+        lg_username.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    String username = ((EditText) v).getText().toString();
+                    if (!"".equals(username)) {
+                        showAvatarOf(username);
+                    }
+                }
+            }
+        });
+
         lg_password =  findViewById(R.id.lg_password);
         lg_userIcon = findViewById(R.id.lg_userIcon);
-        Glide.with(this).load("http://s0.objectspace.top/fs/face/noface.jpg").into(lg_userIcon);
+        Glide.with(this).load("http://s0.objectspace.top/fs/avatar/no-avatar.jpg").into(lg_userIcon);
 
         Button lg_login =  findViewById(R.id.lg_login);
         lg_login.setOnClickListener(view -> getUser());
@@ -126,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void saveData() {
-        sharedPreferences = getSharedPreferences("items",Context.MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences("items", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
         String  username = lg_username.getText().toString();
         String password = lg_password.getText().toString();
@@ -136,6 +155,62 @@ public class MainActivity extends AppCompatActivity {
             editor.putBoolean("flag",true);
             editor.commit();
         }
+    }
+
+    /**
+     * 根据输入的用户名显示用户头像
+     * @param username 用户名
+     */
+    private void showAvatarOf(String username) {
+        Api.getUserInfoByUsername(username, new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                ResponseBody resBody = response.body();
+                if (resBody != null) {
+                    String json = resBody.string();
+                    ObjectMapper mapper = new ObjectMapper();
+                    LogUtils.log("json -> " + json);
+                    DataResponse<UserInfo> res = mapper.readValue(json, new TypeReference<DataResponse<UserInfo>>(){});
+                    // get response code
+                    int code = res.getCode();
+                    // get response message
+                    String message = res.getMessage();
+                    LogUtils.i(TAG,
+                            String.format("login().onResponse: res.code -> %s, res.message -> %s", code, message)
+                    );
+
+                    UserInfo userInfo = res.getData();
+                    if (userInfo != null) {
+                        LogUtils.i(TAG, "login().onResponse: res.data -> "  + userInfo.toString());
+                        String avatar = userInfo.getAvatar();
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Glide.with(getApplicationContext()).load(avatar).into(lg_userIcon);
+                            }
+                        });
+                    } else {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Glide.with(getApplicationContext()).load("http://s0.objectspace.top/fs/avatar/no-avatar.jpg").into(lg_userIcon);
+                            }
+                        });
+                    }
+
+
+
+
+
+                } else {
+                    LogUtils.e(TAG, "login().onResponse: response.body() == null");
+                }
+            }
+        });
     }
 
     /**
@@ -171,15 +246,23 @@ public class MainActivity extends AppCompatActivity {
                         stopLoading();
                     }
                 });
-                if (response.body() != null) {
-                    String json = response.body().string();
+                ResponseBody resBody = response.body();
+                if (resBody != null) {
+                    String json = resBody.string();
                     ObjectMapper mapper = new ObjectMapper();
-                    MessageResponse res = mapper.readValue(json, MessageResponse.class);
+                    LogUtils.log("json -> " + json);
+                    DataResponse<TokenPairInfo> res = mapper.readValue(json, new TypeReference<DataResponse<TokenPairInfo>>(){});
+                    // get response code
                     int code = res.getCode();
-                    String message = res.getMessage();
+                    // get response message
+                    String message = res.toString();
                     LogUtils.i(TAG,
-                            String.format("login().onResponse: code -> %s, message -> %s", code, message)
+                            String.format("login().onResponse: res.code -> %s, res.message -> %s", code, message)
                     );
+
+                    TokenPairInfo tokenPairInfo = res.getData();
+                    LogUtils.i(TAG, "login().onResponse: res.data -> "  + tokenPairInfo.toString());
+
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
