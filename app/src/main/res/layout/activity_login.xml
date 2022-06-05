@@ -27,10 +27,10 @@
             android:layout_below="@id/lg_userIcon"
             android:layout_marginTop="30dp"
             android:drawableLeft="@drawable/username"
-            android:theme="@style/CardView.Light"
             android:drawablePadding="5dp"
             android:hint="账号"
-            android:maxLines="1"/>
+            android:maxLines="1"
+            android:theme="@style/CardView.Light" />
 
         <EditText
             android:id="@+id/lg_password"

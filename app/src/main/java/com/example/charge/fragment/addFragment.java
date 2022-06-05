@@ -1,9 +1,14 @@
 package com.example.charge.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -11,6 +16,12 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.charge.R;
+import com.example.charge.edit.write_blog;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -18,7 +29,9 @@ import com.example.charge.R;
  * create an instance of this fragment.
  */
 public class addFragment extends Fragment {
-
+    private ListView add_listView;
+    private SimpleAdapter simpleAdapter;
+    private ImageView add_add;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -63,9 +76,41 @@ public class addFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_add, container, false);
-    }
+        View view= inflater.inflate(R.layout.fragment_add, container, false);
+        add_add = view.findViewById(R.id.add_add);
+        add_add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), write_blog.class);
+                startActivity(intent);
+            }
+        });
+        add_listView = view.findViewById(R.id.add_list);
+        simpleAdapter = new SimpleAdapter(getActivity(),getData(),R.layout.add_list_view,new String[]{"title","image"},new int[]{R.id.add_list_text1,R.id.home_list_image});
+        add_listView.setAdapter(simpleAdapter);
 
+        add_listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                switch (i){
+
+                }
+            }
+        });
+        return view;
+    }
+    private List<Map<String ,Object>> getData(){
+        String[] titles = {"关注1号","关注2号","关注3号"};
+        int[] images = {R.drawable.gk,R.drawable.zk,R.drawable.exit};
+        List<Map<String ,Object>> list = new ArrayList<>();
+        for (int i = 0; i < 3; i++) {
+            Map map = new HashMap();
+            map.put("image",images[i]);
+            map.put("title",titles[i]);
+            list.add(map);
+        }
+        return list;
+    }
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
