@@ -182,6 +182,48 @@ public class Api {
         });
     }
 
+    public static void changeAvatar(File file, ApiDataCallback<ImageInfo> apiDataCallback) {
+        // 文件名
+        String filename = file.getName();
+        int dotPos = filename.lastIndexOf(".");
+        // 文件拓展名, eg: png
+        String extension = filename.substring(dotPos + 1);
+        // 媒体类型, eg: image/png
+        String mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
+
+        RequestBody fileBody = MultipartBody.create(file, MediaType.parse(mimeType));
+
+        RequestBody requestBody = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("avatar", filename, fileBody)
+                .build();
+
+        ApiHttpClient.asyncPost(ApiUrlEnum.CHANGE_AVATAR.getUrl(), requestBody, null, new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                apiDataCallback.onException(new ApiException(e));
+            }
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) {
+                try {
+                    // Deserialize response JSON value
+                    DataResponse<ImageInfo> res = ResponseParser.parseDataResponse(response, ImageInfo.class);
+                    if (res.getCode() == ResponseEnum.SUCCESS.getCode()) {
+                        if (res.getData() != null) {
+                            apiDataCallback.onSuccess(res.getData());
+                        } else {
+                            apiDataCallback.onException(new ApiException("data == null"));
+                        }
+                    } else {
+                        apiDataCallback.onFailure(res.getCode(), res.getMessage());
+                    }
+                } catch (ApiException e) {
+                    apiDataCallback.onException(e);
+                }
+            }
+        });
+    }
+
     public static void uploadImage(File file, ApiDataCallback<ImageInfo> apiDataCallback) {
         // 文件名
         String filename = file.getName();

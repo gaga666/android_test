@@ -65,7 +65,7 @@ public class ChangeAvatarActivity extends BaseActivity {
                Uri uri = data.getData();
                use_image.setImageURI(uri);
                // 上传
-               upload(uri);
+               changeAvatar(uri);
            }
         }
     }
@@ -75,33 +75,37 @@ public class ChangeAvatarActivity extends BaseActivity {
      * @param uri
      */
     @RequiresApi(api = Build.VERSION_CODES.Q)
-    private void upload(Uri uri) {
+    private void changeAvatar(Uri uri) {
         File file = uriToFile(uri);
-        Api.uploadImage(file, new ApiDataCallback<ImageInfo>() {
+        Api.changeAvatar(file, new ApiDataCallback<ImageInfo>() {
             @Override
             public void onSuccess(@NonNull ImageInfo data) {
                 runOnUiThread(() -> {
                     Toast.makeText(ChangeAvatarActivity.this, "上传成功", Toast.LENGTH_SHORT).show();
                 });
+                // 删除缓存文件
+                file.delete();
             }
             @Override
             public void onFailure(int errCode, @NonNull String errMsg) {
                 String log = "errCode: " + errCode + ", errMsg: " + errMsg;
-                LogUtils.e(TAG, "updatePwd().onFailure: " + log);
+                LogUtils.e(TAG, "changeAvatar().onFailure: " + log);
                 runOnUiThread(() -> {
                     Toast.makeText(ChangeAvatarActivity.this, log, Toast.LENGTH_SHORT).show();
                 });
+                // 删除缓存文件
+                file.delete();
             }
             @Override
             public void onException(@NonNull ApiException e) {
-                LogUtils.e(TAG, "upload().onException: e -> " + e);
+                LogUtils.e(TAG, "changeAvatar().onException: e -> " + e);
                 runOnUiThread(() -> {
                     Toast.makeText(ChangeAvatarActivity.this, "上传失败", Toast.LENGTH_SHORT).show();
                 });
+                // 删除缓存文件
+                file.delete();
             }
         });
-
-        file.delete();
     }
 
     /**
