@@ -1,4 +1,4 @@
-package com.example.charge;
+package com.example.charge.changepwd;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,17 +7,19 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.charge.api.exception.ApiException;
-import com.example.charge.api.callback.ApiCallback;
+import com.example.charge.BaseActivity;
+import com.example.charge.E_mail;
+import com.example.charge.R;
 import com.example.charge.api.Api;
+import com.example.charge.api.callback.ApiCallback;
+import com.example.charge.api.exception.ApiException;
 import com.example.charge.login.LoginActivity;
 import com.example.charge.utils.LogUtils;
 import com.example.charge.view.LoadingDialog;
 
-public class resetpassword extends AppCompatActivity {
-    private static final String TAG = resetpassword.class.getName();
+public class ChangePwdActivity extends BaseActivity {
+    private static final String TAG = ChangePwdActivity.class.getName();
     EditText reset_username;
     EditText reset_password;
     EditText reset_mail;
@@ -52,9 +54,9 @@ public class resetpassword extends AppCompatActivity {
                     // destroy loading dialog
                     stopLoading();
 
-                    Toast.makeText(resetpassword.this, "修改成功", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ChangePwdActivity.this, "修改成功", Toast.LENGTH_SHORT).show();
 
-                    Intent i = new Intent(resetpassword.this, LoginActivity.class);
+                    Intent i = new Intent(ChangePwdActivity.this, LoginActivity.class);
                     startActivity(i);
                     overridePendingTransition(0, 0);
                 });
@@ -67,7 +69,7 @@ public class resetpassword extends AppCompatActivity {
                     // destroy loading dialog
                     stopLoading();
 
-                    Toast.makeText(resetpassword.this, log, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ChangePwdActivity.this, log, Toast.LENGTH_SHORT).show();
                 });
             }
             @Override
@@ -106,7 +108,7 @@ public class resetpassword extends AppCompatActivity {
             @Override
             public void onSuccess() {
                 runOnUiThread(() -> {
-                    Toast.makeText(resetpassword.this, "发送成功", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ChangePwdActivity.this, "发送成功", Toast.LENGTH_SHORT).show();
                 });
             }
             @Override
@@ -115,7 +117,7 @@ public class resetpassword extends AppCompatActivity {
                 LogUtils.e(TAG, "sendEmail().onFailure: " + log);
 
                 runOnUiThread(() -> {
-                    Toast.makeText(resetpassword.this, log, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ChangePwdActivity.this, log, Toast.LENGTH_SHORT).show();
                 });
             }
             @Override
@@ -123,7 +125,7 @@ public class resetpassword extends AppCompatActivity {
                 LogUtils.e(TAG, "sendEmail().onException: e -> " + e);
 
                 runOnUiThread(() -> {
-                    Toast.makeText(resetpassword.this, "发送失败", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ChangePwdActivity.this, "发送失败", Toast.LENGTH_SHORT).show();
                 });
             }
         });

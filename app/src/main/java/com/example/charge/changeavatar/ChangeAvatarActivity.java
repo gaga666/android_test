@@ -1,4 +1,4 @@
-package com.example.charge;
+package com.example.charge.changeavatar;
 
 import android.annotation.SuppressLint;
 import android.content.ContentResolver;
@@ -16,12 +16,13 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.charge.api.exception.ApiException;
-import com.example.charge.api.callback.ApiDataCallback;
-import com.example.charge.api.model.dto.ImageInfo;
+import com.example.charge.BaseActivity;
+import com.example.charge.R;
 import com.example.charge.api.Api;
+import com.example.charge.api.callback.ApiDataCallback;
+import com.example.charge.api.exception.ApiException;
+import com.example.charge.api.model.dto.ImageInfo;
 import com.example.charge.utils.LogUtils;
 
 import java.io.File;
@@ -29,11 +30,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class uses_head extends AppCompatActivity {
+public class ChangeAvatarActivity extends BaseActivity {
     protected static final int CHOOSE_PICTURE = 0;
     protected static final int TAKE_PICTURE = 1;
     private static final int CROP_SMALL_PICTURE = 2;
-    private static final String TAG = uses_head.class.getName();
+    private static final String TAG = ChangeAvatarActivity.class.getName();
     protected static Uri tempUri;
     Button use_change;
     ImageView use_image;
@@ -80,7 +81,7 @@ public class uses_head extends AppCompatActivity {
             @Override
             public void onSuccess(@NonNull ImageInfo data) {
                 runOnUiThread(() -> {
-                    Toast.makeText(uses_head.this, "上传成功", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ChangeAvatarActivity.this, "上传成功", Toast.LENGTH_SHORT).show();
                 });
             }
             @Override
@@ -88,14 +89,14 @@ public class uses_head extends AppCompatActivity {
                 String log = "errCode: " + errCode + ", errMsg: " + errMsg;
                 LogUtils.e(TAG, "updatePwd().onFailure: " + log);
                 runOnUiThread(() -> {
-                    Toast.makeText(uses_head.this, log, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ChangeAvatarActivity.this, log, Toast.LENGTH_SHORT).show();
                 });
             }
             @Override
             public void onException(@NonNull ApiException e) {
                 LogUtils.e(TAG, "upload().onException: e -> " + e);
                 runOnUiThread(() -> {
-                    Toast.makeText(uses_head.this, "上传失败", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ChangeAvatarActivity.this, "上传失败", Toast.LENGTH_SHORT).show();
                 });
             }
         });

@@ -8,7 +8,9 @@ import android.widget.ImageView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.charge.BottomBar.BottomBar;
-import com.example.charge.changemail.change_mail;
+import com.example.charge.changeavatar.ChangeAvatarActivity;
+import com.example.charge.changemail.ChangeMailActivity;
+import com.example.charge.changepwd.ChangePwdActivity;
 
 public class First extends AppCompatActivity {
     @Override
@@ -29,7 +31,7 @@ public class First extends AppCompatActivity {
         first_cal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(First.this, change_mail.class);
+                Intent i = new Intent(First.this, ChangeMailActivity.class);
                 startActivity(i);
                 overridePendingTransition(0,0);
             }
@@ -38,7 +40,7 @@ public class First extends AppCompatActivity {
         first_resetpass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(First.this,resetpassword.class);
+                Intent i = new Intent(First.this, ChangePwdActivity.class);
                 startActivity(i);
                 overridePendingTransition(0,0);
             }
@@ -47,7 +49,7 @@ public class First extends AppCompatActivity {
         first_exit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i =new Intent(First.this,uses_head.class);
+                Intent i =new Intent(First.this, ChangeAvatarActivity.class);
                 startActivity(i);
             }
         });

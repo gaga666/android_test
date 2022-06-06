@@ -27,7 +27,7 @@ import com.example.charge.api.callback.ApiDataCallback;
 import com.example.charge.api.exception.ApiException;
 import com.example.charge.api.model.dto.TokenPairInfo;
 import com.example.charge.api.model.dto.UserInfo;
-import com.example.charge.resetpassword;
+import com.example.charge.changepwd.ChangePwdActivity;
 import com.example.charge.signup.Register;
 import com.example.charge.utils.LogUtils;
 import com.example.charge.view.LoadingDialog;
@@ -76,7 +76,7 @@ public class LoginActivity extends BaseActivity {
         lg_login.setOnClickListener(view -> login());
         lg_forgetPsd = findViewById(R.id.lg_forgetPsd);
         lg_forgetPsd.setOnClickListener(view -> {
-            Intent i = new Intent(LoginActivity.this, resetpassword.class);
+            Intent i = new Intent(LoginActivity.this, ChangePwdActivity.class);
             startActivity(i);
             overridePendingTransition(0,0);
         });

@@ -48,19 +48,19 @@
             android:name=".search"
             android:exported="false" />
         <activity
-            android:name=".changemail.change_mail"
+            android:name=".changemail.ChangeMailActivity"
             android:exported="false" />
         <activity
             android:name=".BottomBar.BottomBar"
             android:exported="false" />
         <activity
-            android:name=".uses_head"
+            android:name=".changeavatar.ChangeAvatarActivity"
             android:exported="false" />
         <activity
             android:name=".LoopView"
             android:exported="false" />
         <activity
-            android:name=".resetpassword"
+            android:name=".changepwd.ChangePwdActivity"
             android:exported="false" />
         <activity
             android:name=".First"

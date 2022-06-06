@@ -16,11 +16,11 @@ import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.example.charge.R;
-import com.example.charge.changemail.change_mail;
-import com.example.charge.resetpassword;
+import com.example.charge.changemail.ChangeMailActivity;
+import com.example.charge.changepwd.ChangePwdActivity;
 import com.example.charge.search;
 import com.example.charge.signup.Register;
-import com.example.charge.uses_head;
+import com.example.charge.changeavatar.ChangeAvatarActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -91,15 +91,15 @@ public class PersonalFragment extends Fragment implements AdapterView.OnItemClic
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 switch (i){
                     case 0:
-                        Intent intent = new Intent(getActivity(), uses_head.class);
+                        Intent intent = new Intent(getActivity(), ChangeAvatarActivity.class);
                         startActivity(intent);
                         break;
                     case 1:
-                        Intent intent1 = new Intent(getActivity(), resetpassword.class);
+                        Intent intent1 = new Intent(getActivity(), ChangePwdActivity.class);
                         startActivity(intent1);
                         break;
                     case 2:
-                        Intent intent2 = new Intent(getActivity(), change_mail.class);
+                        Intent intent2 = new Intent(getActivity(), ChangeMailActivity.class);
                         startActivity(intent2);
                         break;
                     case 3:
