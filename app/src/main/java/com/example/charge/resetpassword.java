@@ -9,19 +9,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.charge.api.ApiException;
+import com.example.charge.api.exception.ApiException;
 import com.example.charge.api.callback.ApiCallback;
-import com.example.charge.api.remote.Api;
-import com.example.charge.api.model.MessageResponse;
+import com.example.charge.api.Api;
 import com.example.charge.login.LoginActivity;
 import com.example.charge.utils.LogUtils;
 import com.example.charge.view.LoadingDialog;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import java.io.IOException;
-
-import okhttp3.Call;
-import okhttp3.Response;
 
 public class resetpassword extends AppCompatActivity {
     private static final String TAG = resetpassword.class.getName();

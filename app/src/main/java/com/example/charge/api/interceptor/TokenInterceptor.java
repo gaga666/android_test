@@ -8,12 +8,12 @@ import androidx.annotation.NonNull;
 
 import com.example.charge.MyApplication;
 import com.example.charge.TokenManager;
-import com.example.charge.api.ApiException;
+import com.example.charge.api.exception.ApiException;
 import com.example.charge.api.enums.ResponseEnum;
 import com.example.charge.api.model.DataResponse;
 import com.example.charge.api.model.MessageResponse;
 import com.example.charge.api.model.dto.TokenPairInfo;
-import com.example.charge.api.remote.Api;
+import com.example.charge.api.Api;
 import com.example.charge.common.Constants;
 import com.example.charge.utils.LogUtils;
 import com.fasterxml.jackson.databind.DeserializationFeature;

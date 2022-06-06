@@ -1,37 +1,26 @@
 package com.example.charge.splashscreen;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-//import com.example.charge.BaseActivity;
 import com.example.charge.LoopView;
 import com.example.charge.MyApplication;
 import com.example.charge.R;
 import com.example.charge.TokenManager;
-import com.example.charge.api.ApiException;
+import com.example.charge.api.exception.ApiException;
 import com.example.charge.api.callback.ApiDataCallback;
 import com.example.charge.api.enums.ResponseEnum;
-import com.example.charge.api.remote.Api;
+import com.example.charge.api.model.dto.UserInfo;
+import com.example.charge.api.Api;
 import com.example.charge.common.Constants;
-import com.example.charge.entity.DataResponse;
-import com.example.charge.entity.UserInfo;
 import com.example.charge.login.LoginActivity;
 import com.example.charge.utils.LogUtils;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Response;
-import okhttp3.ResponseBody;
 
 public class SplashScreen extends AppCompatActivity {
 
@@ -45,23 +34,7 @@ public class SplashScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splashscreen);
 
-        long startTime = System.currentTimeMillis();
-
-        Intent intent = new Intent(SplashScreen.this, LoopView.class);
-
-        // 不足2秒则延迟, 避免一闪而过
-        if (System.currentTimeMillis() - startTime < DELAY) {
-            Timer timer = new Timer();
-            TimerTask task = new TimerTask() {
-                @Override
-                public void run() {
-                    startActivity(intent);
-                    finish();
-                }
-            };
-            timer.schedule(task, DELAY - (System.currentTimeMillis() - startTime));
-        }
-//        init();
+        init();
     }
 
     private void init() {

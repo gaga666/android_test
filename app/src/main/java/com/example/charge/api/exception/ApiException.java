@@ -1,4 +1,4 @@
-package com.example.charge.api;
+package com.example.charge.api.exception;
 
 import android.os.Build;
 

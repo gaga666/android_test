@@ -1,12 +1,11 @@
-package com.example.charge.api.remote;
+package com.example.charge.api;
 
 import android.webkit.MimeTypeMap;
 
 import androidx.annotation.NonNull;
 
 import com.example.charge.TokenManager;
-import com.example.charge.api.ApiException;
-import com.example.charge.api.ApiHttpClient;
+import com.example.charge.api.exception.ApiException;
 import com.example.charge.api.callback.ApiCallback;
 import com.example.charge.api.callback.ApiDataCallback;
 import com.example.charge.api.enums.ApiUrlEnum;

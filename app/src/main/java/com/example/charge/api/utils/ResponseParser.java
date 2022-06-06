@@ -1,6 +1,6 @@
 package com.example.charge.api.utils;
 
-import com.example.charge.api.ApiException;
+import com.example.charge.api.exception.ApiException;
 import com.example.charge.api.model.DataResponse;
 import com.example.charge.api.model.MessageResponse;
 import com.example.charge.utils.LogUtils;

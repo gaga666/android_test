@@ -12,27 +12,22 @@ import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.charge.api.remote.Api;
-import com.example.charge.entity.DataResponse;
-import com.example.charge.entity.ImageInfo;
+import com.example.charge.api.exception.ApiException;
+import com.example.charge.api.callback.ApiDataCallback;
+import com.example.charge.api.model.dto.ImageInfo;
+import com.example.charge.api.Api;
 import com.example.charge.utils.LogUtils;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Response;
-import okhttp3.ResponseBody;
 
 public class uses_head extends AppCompatActivity {
     protected static final int CHOOSE_PICTURE = 0;
@@ -81,36 +76,30 @@ public class uses_head extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.Q)
     private void upload(Uri uri) {
         File file = uriToFile(uri);
-        Api.uploadImage(file, new Callback() {
+        Api.uploadImage(file, new ApiDataCallback<ImageInfo>() {
             @Override
-            public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                LogUtils.error("上传失败");
-                LogUtils.error(e.getLocalizedMessage());
+            public void onSuccess(@NonNull ImageInfo data) {
+                runOnUiThread(() -> {
+                    Toast.makeText(uses_head.this, "上传成功", Toast.LENGTH_SHORT).show();
+                });
             }
-
             @Override
-            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                LogUtils.log("上传成功");
-                ResponseBody resBody = response.body();
-                if (resBody != null) {
-                    String jsonStr = resBody.string();
-                    LogUtils.log("json -> " + jsonStr);
-                    ObjectMapper mapper = new ObjectMapper();
-                    DataResponse<ImageInfo> res = mapper.readValue(jsonStr, new TypeReference<DataResponse<ImageInfo>>(){});
-                    // get response code
-                    int code = res.getCode();
-                    LogUtils.log("code -> " + code);
-                    // get response message
-                    String msg = res.toString();
-                    LogUtils.log("message -> " + msg);
-                    // get response data {"imageWidth": xx, "imageHeight": xx, "imageUrl": xx}
-                    ImageInfo imageInfo = res.getData();
-                    LogUtils.log("data -> "  + imageInfo.toString());
-                } else {
-                    LogUtils.error("resBody == null");
-                }
+            public void onFailure(int errCode, @NonNull String errMsg) {
+                String log = "errCode: " + errCode + ", errMsg: " + errMsg;
+                LogUtils.e(TAG, "updatePwd().onFailure: " + log);
+                runOnUiThread(() -> {
+                    Toast.makeText(uses_head.this, log, Toast.LENGTH_SHORT).show();
+                });
+            }
+            @Override
+            public void onException(@NonNull ApiException e) {
+                LogUtils.e(TAG, "upload().onException: e -> " + e);
+                runOnUiThread(() -> {
+                    Toast.makeText(uses_head.this, "上传失败", Toast.LENGTH_SHORT).show();
+                });
             }
         });
+
         file.delete();
     }
 

@@ -2,7 +2,7 @@ package com.example.charge.api.callback;
 
 import androidx.annotation.NonNull;
 
-import com.example.charge.api.ApiException;
+import com.example.charge.api.exception.ApiException;
 import com.example.charge.api.enums.ResponseEnum;
 
 /**

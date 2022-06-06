@@ -10,9 +10,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.charge.R;
-import com.example.charge.api.ApiException;
+import com.example.charge.api.exception.ApiException;
 import com.example.charge.api.callback.ApiCallback;
-import com.example.charge.api.remote.Api;
+import com.example.charge.api.Api;
 import com.example.charge.E_mail;
 import com.example.charge.login.LoginActivity;
 import com.example.charge.utils.LogUtils;
