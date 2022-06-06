@@ -11,6 +11,7 @@ import com.example.charge.LoopView;
 import com.example.charge.MyApplication;
 import com.example.charge.R;
 import com.example.charge.TokenManager;
+import com.example.charge.UserInfoManager;
 import com.example.charge.api.exception.ApiException;
 import com.example.charge.api.callback.ApiDataCallback;
 import com.example.charge.api.enums.ResponseEnum;
@@ -48,6 +49,7 @@ public class SplashScreen extends BaseActivity {
                 @Override
                 public void onSuccess(@NonNull UserInfo data) {
                     // TODO: 保存用户信息
+                    UserInfoManager.getInstance().updateInfo(data);
                     Intent intent = new Intent(SplashScreen.this, LoopView.class);
                     // 不足2秒则延迟, 避免一闪而过
                     if (System.currentTimeMillis() - startTime < DELAY) {

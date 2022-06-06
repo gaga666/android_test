@@ -1,23 +1,33 @@
 package com.example.charge.fragment;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
+import com.example.charge.ActivityCollector;
 import com.example.charge.R;
+import com.example.charge.TokenManager;
+import com.example.charge.UserInfoManager;
 import com.example.charge.changemail.ChangeMailActivity;
 import com.example.charge.changepwd.ChangePwdActivity;
+import com.example.charge.login.LoginActivity;
 import com.example.charge.search;
 import com.example.charge.signup.Register;
 import com.example.charge.changeavatar.ChangeAvatarActivity;
@@ -35,7 +45,9 @@ import java.util.Map;
 public class PersonalFragment extends Fragment implements AdapterView.OnItemClickListener {
     ListView listView;
     SimpleAdapter simpleAdapter;
-    ImageView personal_head;
+    ImageView personalAvatar;
+    private TextView personalUname;
+    private TextView personalUid;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -79,8 +91,23 @@ public class PersonalFragment extends Fragment implements AdapterView.OnItemClic
                              Bundle savedInstanceState) {
 //         Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_personal, container,false);
-        personal_head = view.findViewById(R.id.personal_head);
-        Glide.with(getActivity()).load("http://s0.objectspace.top/fs/face/noface.jpg").into(personal_head);
+        personalAvatar = view.findViewById(R.id.personal_avatar);
+        Glide.with(getActivity()).load(UserInfoManager.getInstance().getAvatar()).into(personalAvatar);
+
+        personalUname = view.findViewById(R.id.personal_uname);
+        personalUname.setText(UserInfoManager.getInstance().getUsername());
+
+        personalUid = view.findViewById(R.id.personal_uid);
+        personalUid.setText("UID:" + UserInfoManager.getInstance().getUid());
+        personalUid.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ClipboardManager cm = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clipData = ClipData.newPlainText(null, ((TextView) v).getText());
+                cm.setPrimaryClip(clipData);
+                Toast.makeText(getContext(), "UID号已复制到剪切板", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         listView = view.findViewById(R.id.personal_view);
         simpleAdapter = new SimpleAdapter(getActivity(),getData(),R.layout.list,new String[]{"title","image"},new int[]{R.id.list_text1,R.id.list_image});
@@ -109,6 +136,16 @@ public class PersonalFragment extends Fragment implements AdapterView.OnItemClic
                     case 4:
                         Intent intent4 = new Intent(getActivity(), Register.class);
                         startActivity(intent4);
+                        break;
+                    case 5:
+                        // 清理 TOKEN 信息
+                        TokenManager.getInstance().clearInfo();
+                        // 清理用户信息
+                        UserInfoManager.getInstance().clearInfo();
+                        // 关闭所有 Activity
+                        ActivityCollector.finishAll();
+                        Intent intent5 = new Intent(getActivity(), LoginActivity.class);
+                        startActivity(intent5);
                         break;
                 }
             }

@@ -27,6 +27,8 @@ public class MyApplication extends Application {
         ApiHttpClient.init(this);
         // 初始化 Token 管理器
         TokenManager.getInstance().init(this);
+        // 初始化 User-Info 管理器
+        UserInfoManager.getInstance().init(this);
     }
 
     public static Context getContext() {

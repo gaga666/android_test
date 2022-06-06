@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.charge.BaseActivity;
 import com.example.charge.R;
 import com.example.charge.fragment.AddFragment;
 import com.example.charge.fragment.HomeFragment;
@@ -20,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class BottomBar extends AppCompatActivity {
+public class BottomBar extends BaseActivity {
     private int TAG = 0;
     private TextView bottom_bar_1text,bottom_bar_2text,bottom_bar_3text;
     private ImageView bottom_bar_1image,bottom_bar_2image,bottom_bar_3image;

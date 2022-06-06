@@ -10,6 +10,9 @@ public enum ApiUrlEnum {
     /** 登录 */
     LOGIN("passport/login"),
 
+    /** 退出登录 */
+    LOGOUT("passport/logout"),
+
     /** 发送邮件验证码 */
     SEND_MAIL("passport/mail/send"),
 

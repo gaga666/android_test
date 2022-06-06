@@ -19,32 +19,15 @@ public class TokenManager {
 
     private static Context sContext;
 
-    // 单独开辟一个线程来处理 Looper
-    private HandlerThread mTokenThread;
-
-    private Handler mTokenHandle;
-
     private TokenPairInfo mTokenPairInfo;
+
+    private TokenManager() {}
 
     public static TokenManager getInstance() {
         if (INSTANCE == null) {
             synchronized (TokenManager.class) {
                 if (INSTANCE == null) {
                     INSTANCE = new TokenManager();
-//                    INSTANCE.mTokenThread = new HandlerThread("Token-HandlerThread");
-//                    INSTANCE.mTokenHandle = new Handler(INSTANCE.mTokenThread.getLooper()) {
-//                        @Override
-//                        public void handleMessage(@NonNull Message msg) {
-//                            super.handleMessage(msg);
-//                            if (msg.obj != null) {
-//                                switch (msg.what) {
-//
-//                                }
-//                            } else {
-//                                LogUtils.d(LOG_TAG, "getTokenHandler : msg is null");
-//                            }
-//                        }
-//                    };
                 }
             }
         }

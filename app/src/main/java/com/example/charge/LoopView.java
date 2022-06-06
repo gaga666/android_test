@@ -18,7 +18,7 @@ import com.example.charge.BottomBar.BottomBar;
 
 import java.util.ArrayList;
 
-public class LoopView extends AppCompatActivity {
+public class LoopView extends BaseActivity {
 
     private ViewPager viewPager;  //轮播图模块
     private int[] mImg;

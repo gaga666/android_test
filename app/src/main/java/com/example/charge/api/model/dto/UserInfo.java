@@ -1,5 +1,7 @@
 package com.example.charge.api.model.dto;
 
+import androidx.annotation.NonNull;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class UserInfo {
@@ -29,34 +31,39 @@ public class UserInfo {
         return uid;
     }
 
-    public void setUid(Long uid) {
+    public UserInfo setUid(Long uid) {
         this.uid = uid;
+        return this;
     }
 
     public String getUsername() {
         return username;
     }
 
-    public void setUsername(String username) {
+    public UserInfo setUsername(String username) {
         this.username = username;
+        return this;
     }
 
     public String getAvatar() {
         return avatar;
     }
 
-    public void setAvatar(String avatar) {
+    public UserInfo setAvatar(String avatar) {
         this.avatar = avatar;
+        return this;
     }
 
     public String getSex() {
         return sex;
     }
 
-    public void setSex(String sex) {
+    public UserInfo setSex(String sex) {
         this.sex = sex;
+        return this;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "UserInfo{" +

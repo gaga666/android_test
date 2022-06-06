@@ -66,7 +66,7 @@ public class ApiHttpClient {
      */
     public static RequestBody buildFormBody(Map<String, String> params) {
         FormBody.Builder formBodyBuilder = new FormBody.Builder();
-        if (params != null) {
+        if (params != null && params.size() > 0) {
             for (Map.Entry<String, String> param : params.entrySet()) {
                 formBodyBuilder.add(param.getKey(), param.getValue());
             }

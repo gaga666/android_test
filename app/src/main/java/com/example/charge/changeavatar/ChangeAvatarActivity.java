@@ -19,10 +19,12 @@ import androidx.annotation.RequiresApi;
 
 import com.example.charge.BaseActivity;
 import com.example.charge.R;
+import com.example.charge.UserInfoManager;
 import com.example.charge.api.Api;
 import com.example.charge.api.callback.ApiDataCallback;
 import com.example.charge.api.exception.ApiException;
 import com.example.charge.api.model.dto.ImageInfo;
+import com.example.charge.api.model.dto.UserInfo;
 import com.example.charge.utils.LogUtils;
 
 import java.io.File;
@@ -83,6 +85,12 @@ public class ChangeAvatarActivity extends BaseActivity {
                 runOnUiThread(() -> {
                     Toast.makeText(ChangeAvatarActivity.this, "上传成功", Toast.LENGTH_SHORT).show();
                 });
+                UserInfo newUserInfo = new UserInfo()
+                        .setAvatar(data.getImageUrl())
+                        .setSex(UserInfoManager.getInstance().getSex())
+                        .setUsername(UserInfoManager.getInstance().getUsername())
+                        .setUid(UserInfoManager.getInstance().getUid());
+                UserInfoManager.getInstance().updateInfo(newUserInfo);
                 // 删除缓存文件
                 file.delete();
             }

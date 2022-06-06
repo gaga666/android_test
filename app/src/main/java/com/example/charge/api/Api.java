@@ -27,6 +27,7 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
+import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
@@ -94,6 +95,30 @@ public class Api {
                     }
                 } catch (ApiException e) {
                     apiDataCallback.onException(e);
+                }
+            }
+        });
+    }
+
+    public static void logout(ApiCallback apiCallback) {
+        ApiHttpClient.asyncPost(ApiUrlEnum.LOGOUT.getUrl(), new HashMap<>(0), null, new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                LogUtils.e(LOG_TAG, "login.onFailure(): e -> " + e);
+                apiCallback.onException(new ApiException(e));
+            }
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) {
+                try {
+                    // Deserialize response JSON value
+                    MessageResponse res = ResponseParser.parseMsgResponse(response);
+                    if (res.getCode() == ResponseEnum.SUCCESS.getCode()) {
+                        apiCallback.onSuccess();
+                    } else {
+                        apiCallback.onFailure(res.getCode(), res.getMessage());
+                    }
+                } catch (ApiException e) {
+                    apiCallback.onException(e);
                 }
             }
         });
