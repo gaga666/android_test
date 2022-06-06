@@ -1,5 +1,7 @@
 package com.example.charge.entity;
 
+import androidx.annotation.NonNull;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 
@@ -36,26 +38,30 @@ public class TokenPairInfo {
         return refreshToken;
     }
 
-    public void setRefreshToken(String refreshToken) {
+    public TokenPairInfo setRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
+        return this;
     }
 
     public String getAccessToken() {
         return accessToken;
     }
 
-    public void setAccessToken(String accessToken) {
+    public TokenPairInfo setAccessToken(String accessToken) {
         this.accessToken = accessToken;
+        return this;
     }
 
     public String getTokenType() {
         return tokenType;
     }
 
-    public void setTokenType(String tokenType) {
+    public TokenPairInfo setTokenType(String tokenType) {
         this.tokenType = tokenType;
+        return this;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "TokenPairInfo{" +

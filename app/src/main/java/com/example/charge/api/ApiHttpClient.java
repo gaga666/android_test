@@ -4,6 +4,8 @@ import android.app.Application;
 
 import androidx.annotation.NonNull;
 
+import com.example.charge.api.interceptor.RequestHeadersInterceptor;
+import com.example.charge.api.interceptor.TokenInterceptor;
 import com.example.charge.utils.LogUtils;
 
 import java.io.IOException;
@@ -28,32 +30,19 @@ public class ApiHttpClient {
     private static final String TAG = ApiHttpClient.class.getName();
 
     private static final String API_URL = "https://api.objectspace.top/se/%s";
-    private static final String HOST = "api.objectspace.top";
 
     private static OkHttpClient CLIENT;
 
     public static void init(Application context) {
-        // 公共请求头
-        Headers headers = new Headers.Builder()
-                .add("Accept-Language", Locale.getDefault().toString())
-                .add("Host", HOST)
-                .add("Connection", "Keep-Alive")
-                .build();
+
         CLIENT = new OkHttpClient.Builder()
                 .connectTimeout(5, TimeUnit.SECONDS)
                 // 拦截器统一添加header
-                .addInterceptor(new Interceptor() {
-                    @NonNull
-                    @Override
-                    public Response intercept(@NonNull Chain chain) throws IOException {
-                        Request request = chain.request().newBuilder()
-                                .headers(headers)
-                                .build();
-                        return chain.proceed(request);
-                    }
-                })
+                .addInterceptor(new RequestHeadersInterceptor())
+                // 拦截器判断 Token 是否过期或失效并刷新
+//                .addInterceptor(new TokenInterceptor())
                 .build();
-        log("api http client init.");
+        log("API client init.");
     }
 
     public static void log(String log) {
@@ -99,18 +88,20 @@ public class ApiHttpClient {
      * @param headers (optional) the request headers
      * @return a new {@link Call} instance
      */
-    public static Call buildGetCall(String url, Map<String, String> params, Headers headers) {
+    public static Call buildGetCall(String url, Map<String, String> params, Map<String, String> headers) {
         HttpUrl.Builder urlBuilder = HttpUrl.parse(url).newBuilder();
         // add query parameters if any
-        if (params != null) {
-            for (Map.Entry<String, String> param : params.entrySet()) {
-                urlBuilder.addQueryParameter(param.getKey(), param.getValue());
+        if (params != null && params.size() > 0) {
+            for (Map.Entry<String, String> entry : params.entrySet()) {
+                urlBuilder.addQueryParameter(entry.getKey(), entry.getValue());
             }
         }
         Request.Builder builder = new Request.Builder();
         // add headers if any
-        if (headers != null) {
-            builder.headers(headers);
+        if (headers != null && headers.size() > 0) {
+            for (Map.Entry<String, String> entry : headers.entrySet()) {
+                builder.addHeader(entry.getKey(), entry.getValue());
+            }
         }
         Request request = builder
                 .url(urlBuilder.build())
@@ -128,11 +119,13 @@ public class ApiHttpClient {
      * @param headers (optional) the request headers
      * @return a new {@link Call} instance
      */
-    public static Call buildPostCall(String url, RequestBody requestBody, Headers headers) {
+    public static Call buildPostCall(String url, RequestBody requestBody, Map<String, String> headers) {
         Request.Builder builder = new Request.Builder();
         // add headers if any
-        if (headers != null) {
-            builder.headers(headers);
+        if (headers != null && headers.size() > 0) {
+            for (Map.Entry<String, String> entry : headers.entrySet()) {
+                builder.addHeader(entry.getKey(), entry.getValue());
+            }
         }
         Request request = builder
                 .url(url)
@@ -167,7 +160,7 @@ public class ApiHttpClient {
     /**
      * 无参同步(Synchronous) GET 请求
      */
-    public static Response syncGet(String partUrl, Headers headers) throws IOException {
+    public static Response syncGet(String partUrl, Map<String, String> headers) throws IOException {
         // no query parameter
         return syncGet(partUrl, null, headers);
     }
@@ -181,7 +174,7 @@ public class ApiHttpClient {
      * @return the response of the request
      * @throws IOException
      */
-    public static Response syncGet(String partUrl, Map<String, String> params, Headers headers) throws IOException {
+    public static Response syncGet(String partUrl, Map<String, String> params, Map<String, String> headers) throws IOException {
         Call call = buildGetCall(getAbsoluteApiUrl(partUrl), params, headers);
         return syncRequest(call);
     }
@@ -189,7 +182,7 @@ public class ApiHttpClient {
     /**
      * 无参异步(Asynchronous) GET 请求
      */
-    public static void asyncGet(String partUrl, Headers headers, Callback callback) {
+    public static void asyncGet(String partUrl, Map<String, String> headers, Callback callback) {
         // no query parameter
         asyncGet(partUrl, null, headers, callback);
     }
@@ -202,10 +195,10 @@ public class ApiHttpClient {
      * @param headers (optional) the request headers
      * @param callback the response callback of the request
      */
-    public static void asyncGet(String partUrl, Map<String, String> params, Headers headers,
+    public static void asyncGet(String partUrl, Map<String, String> params, Map<String, String> headers,
                                 Callback callback) {
         Call call = buildGetCall(getAbsoluteApiUrl(partUrl), params, headers);
-        log("GET " + partUrl + "?" + params);
+        log("GET " + partUrl + ((params == null) ? "" : ("?" + params)));
         asyncRequest(call, callback);
     }
 
@@ -218,7 +211,7 @@ public class ApiHttpClient {
      * @return the response of the request
      * @throws IOException
      */
-    public static Response syncPost(String partUrl, Map<String, String> params, Headers headers)
+    public static Response syncPost(String partUrl, Map<String, String> params, Map<String, String> headers)
             throws IOException {
         return syncPost(partUrl, buildFormBody(params), headers);
     }
@@ -232,7 +225,7 @@ public class ApiHttpClient {
      * @return the response of the request
      * @throws IOException
      */
-    public static Response syncPost(String partUrl, RequestBody requestBody, Headers headers)
+    public static Response syncPost(String partUrl, RequestBody requestBody, Map<String, String> headers)
             throws IOException {
         Call call = buildPostCall(getAbsoluteApiUrl(partUrl), requestBody, headers);
         log("POST " + partUrl + "?" + requestBody);
@@ -247,7 +240,7 @@ public class ApiHttpClient {
      * @param headers (optional) the request headers
      * @param callback the response callback of the request
      */
-    public static void asyncPost(String partUrl, Map<String, String> params, Headers headers,
+    public static void asyncPost(String partUrl, Map<String, String> params, Map<String, String> headers,
                                  Callback callback) {
         asyncPost(partUrl, buildFormBody(params), headers, callback);
     }
@@ -260,7 +253,7 @@ public class ApiHttpClient {
      * @param headers (optional) the request headers
      * @param callback the response callback of the request
      */
-    public static void asyncPost(String partUrl, RequestBody requestBody, Headers headers,
+    public static void asyncPost(String partUrl, RequestBody requestBody, Map<String, String> headers,
                                  Callback callback) {
         Call call = buildPostCall(getAbsoluteApiUrl(partUrl), requestBody, headers);
         log("POST " + partUrl + "?" + requestBody);
