@@ -1,15 +1,17 @@
 package com.example.charge.api.utils;
 
 import com.example.charge.api.ApiException;
-import com.example.charge.api.enums.ResponseEnum;
-import com.example.charge.entity.DataResponse;
-import com.example.charge.entity.MessageResponse;
+import com.example.charge.api.model.DataResponse;
+import com.example.charge.api.model.MessageResponse;
 import com.example.charge.utils.LogUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.apache.commons.lang3.reflect.TypeUtils;
+
 import java.io.IOException;
+import java.lang.reflect.Type;
 
 import okhttp3.Response;
 import okhttp3.ResponseBody;
@@ -21,6 +23,9 @@ public class ResponseParser {
     private static final String LOG_TAG = ResponseParser.class.getName();
 
     public static MessageResponse parseMsgResponse(Response response) throws ApiException {
+        if (response == null) {
+            throw new ApiException("response == null");
+        }
         if (response.code() != 200) {
             String errLog = "response.code() == " + response.code();
             LogUtils.e(LOG_TAG, errLog);
@@ -49,7 +54,10 @@ public class ResponseParser {
         }
     }
 
-    public static <T> DataResponse<T> parseDataResponse(Response response) throws ApiException {
+    public static <T> DataResponse<T> parseDataResponse(Response response, Class<T> cls) throws ApiException {
+        if (response == null) {
+            throw new ApiException("response == null");
+        }
         if (response.code() != 200) {
             throw new ApiException("response.code() == " + response.code());
         }
@@ -68,7 +76,12 @@ public class ResponseParser {
         }
         ObjectMapper mapper = new ObjectMapper();
         try {
-            return mapper.readValue(json, new TypeReference<DataResponse<T>>(){});
+            return mapper.readValue(json, new TypeReference<DataResponse<T>>() {
+                @Override
+                public Type getType() {
+                    return TypeUtils.parameterize(DataResponse.class, cls);
+                }
+            });
         } catch (JsonProcessingException e) {
             throw new ApiException(e);
         }

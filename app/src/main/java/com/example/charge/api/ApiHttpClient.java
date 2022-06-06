@@ -2,23 +2,18 @@ package com.example.charge.api;
 
 import android.app.Application;
 
-import androidx.annotation.NonNull;
-
 import com.example.charge.api.interceptor.RequestHeadersInterceptor;
 import com.example.charge.api.interceptor.TokenInterceptor;
 import com.example.charge.utils.LogUtils;
 
 import java.io.IOException;
-import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
-import okhttp3.Headers;
 import okhttp3.HttpUrl;
-import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -34,13 +29,12 @@ public class ApiHttpClient {
     private static OkHttpClient CLIENT;
 
     public static void init(Application context) {
-
         CLIENT = new OkHttpClient.Builder()
                 .connectTimeout(5, TimeUnit.SECONDS)
                 // 拦截器统一添加header
                 .addInterceptor(new RequestHeadersInterceptor())
                 // 拦截器判断 Token 是否过期或失效并刷新
-//                .addInterceptor(new TokenInterceptor())
+                .addInterceptor(new TokenInterceptor())
                 .build();
         log("API client init.");
     }

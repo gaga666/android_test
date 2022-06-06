@@ -9,87 +9,112 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.charge.R;
-import com.example.charge.api.remote.Api;
 import com.example.charge.E_mail;
-import com.example.charge.entity.MessageResponse;
+import com.example.charge.R;
+import com.example.charge.api.ApiException;
+import com.example.charge.api.callback.ApiCallback;
+import com.example.charge.api.remote.Api;
 import com.example.charge.login.LoginActivity;
 import com.example.charge.utils.LogUtils;
 import com.example.charge.view.LoadingDialog;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import java.io.IOException;
-
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Response;
 
 public class change_mail extends AppCompatActivity {
+
     private static final String TAG = change_mail.class.getName();
-    EditText mail_old_mail,mail_new_mail,mail_verify;
-    Button mail_getVerify,mail_reset;
+
+    EditText mail_old_mail, mail_new_mail,mail_verify;
+    Button mail_getVerify, mail_reset;
     LoadingDialog mLoadingDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_mail);
         initView();
     }
+
     private void initView(){
         mail_new_mail = findViewById(R.id.mail_new_mail);
         mail_old_mail = findViewById(R.id.mail_old_mail);
         mail_verify = findViewById(R.id.mail_verify);
         mail_getVerify = findViewById(R.id.mail_getVerify);
         mail_reset = findViewById(R.id.mail_reset);
-        OnClick();
-    }
-    private void OnClick(){
-        mail_getVerify.setOnClickListener(view -> send(mail_old_mail.getText().toString()));
-        mail_reset.setOnClickListener(view -> update_mail(mail_old_mail.getText().toString(),mail_new_mail.getText().toString(),mail_verify.getText().toString()));
+
+        // set click listener
+        mail_getVerify.setOnClickListener(view -> {
+            sendEmail(mail_old_mail.getText().toString());
+        });
+        mail_reset.setOnClickListener(view -> {
+            String oldMail = mail_old_mail.getText().toString();
+            String newMail = mail_new_mail.getText().toString();
+            String code = mail_verify.getText().toString();
+            updateMail(oldMail, newMail, code);
+        });
     }
 
-    public void update_mail(String oldMail, String newMail, String code) {
-        LogUtils.i(TAG, String.format("oldMail -> %s, code -> %s, newMail -> %s", oldMail, code,newMail));
+    public void updateMail(String oldMail, String newMail, String code) {
+        LogUtils.i(TAG, String.format("oldMail -> %s, code -> %s, newMail -> %s", oldMail, code, newMail));
         // show loading dialog
         showLoading();
-        Api.changeMail(oldMail, newMail,code,new Callback() {
+        Api.changeMail(oldMail, newMail, code, new ApiCallback() {
             @Override
-            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+            public void onSuccess() {
                 runOnUiThread(() -> {
                     // destroy loading dialog
                     stopLoading();
+
+                    Toast.makeText(change_mail.this, "修改成功", Toast.LENGTH_SHORT).show();
+
+                    Intent i = new Intent(change_mail.this, LoginActivity.class);
+                    startActivity(i);
+                    overridePendingTransition(0, 0);
                 });
-                LogUtils.e(TAG, "ChangeMail().onFailure: exception -> " + e);
             }
-
             @Override
-            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+            public void onFailure(int errCode, @NonNull String errMsg) {
+                String log = "errCode: " + errCode + ", errMsg: " + errMsg;
+                LogUtils.e(TAG, "sendEmail().onFailure: " + log);
+
+                runOnUiThread(() -> {
+                    Toast.makeText(change_mail.this, log, Toast.LENGTH_SHORT).show();
+                });
+            }
+            @Override
+            public void onException(@NonNull ApiException e) {
+                LogUtils.e(TAG, "updateMail().onException: e -> " + e);
+
                 runOnUiThread(() -> {
                     // destroy loading dialog
                     stopLoading();
                 });
-                if (response.body() != null) {
-                    String json = response.body().string();
-                    ObjectMapper mapper = new ObjectMapper();
-                    MessageResponse res = mapper.readValue(json, MessageResponse.class);
-                    int code = res.getCode();
-                    String message = res.getMessage();
-                    LogUtils.i(TAG,
-                            String.format("ChangeMail().onResponse: code -> %s, message -> %s", code, message)
-                    );
-                    runOnUiThread(() -> {
-                        Toast.makeText(change_mail.this, message, Toast.LENGTH_SHORT).show();
-                        if (code == 0) {
-                            Intent i = new Intent(change_mail.this, LoginActivity.class);
-                            startActivity(i);
-                            overridePendingTransition(0, 0);
-                        }
-                    });
+            }
+        });
+    }
 
-                } else {
-                    LogUtils.e(TAG, "ChangeMail().onResponse: response.body() == null");
-                }
+    public void sendEmail(String to) {
+        if(!E_mail.isValidEmail(to)) {
+            Toast.makeText(this, "请输入有效邮箱", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        Api.sendMail(to,14, new ApiCallback() {
+            @Override
+            public void onSuccess() {
+                runOnUiThread(() -> {
+                    Toast.makeText(change_mail.this, "邮箱已发送", Toast.LENGTH_SHORT).show();
+                });
+            }
+            @Override
+            public void onFailure(int errCode, @NonNull String errMsg) {
+                String log = "errCode: " + errCode + ", errMsg: " + errMsg;
+                LogUtils.e(TAG, "sendEmail().onFailure: " + log);
 
+                runOnUiThread(() -> {
+                    Toast.makeText(change_mail.this, log, Toast.LENGTH_SHORT).show();
+                });
+            }
+            @Override
+            public void onException(@NonNull ApiException e) {
+                LogUtils.e(TAG, "sendEmail().onException: e -> " + e);
             }
         });
     }
@@ -101,51 +126,6 @@ public class change_mail extends AppCompatActivity {
             mLoadingDialog.setCancelable(false);
             mLoadingDialog.show();
         }
-    }
-
-    public void send(String to) {
-        if(!E_mail.isValidEmail(to)){
-            Toast.makeText(this, "请输入有效邮箱", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        Api.sendMail(to,14,new Callback() {
-            @Override
-            public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                runOnUiThread(() -> {
-                    // destroy loading dialog
-                    stopLoading();
-                });
-                LogUtils.e(TAG, "sendMail14().onFailure: exception -> " + e);
-            }
-
-            @Override
-            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                runOnUiThread(() -> {
-                    // destroy loading dialog
-                    stopLoading();
-                });
-                if (response.body() != null) {
-                    String json = response.body().string();
-                    ObjectMapper mapper = new ObjectMapper();
-                    MessageResponse res = mapper.readValue(json, MessageResponse.class);
-                    int code = res.getCode();
-                    String message = res.getMessage();
-                    LogUtils.i(TAG,
-                            String.format("sendMail14().onResponse: code -> %s, message -> %s", code, message)
-                    );
-                    runOnUiThread(() -> {
-                        Toast.makeText(change_mail.this, message, Toast.LENGTH_SHORT).show();
-                        if (code == 0) {
-
-                        }
-                    });
-
-                } else {
-                    LogUtils.e(TAG, "sendMail13().onResponse: response.body() == null");
-                }
-
-            }
-        });
     }
 
     private void stopLoading() {

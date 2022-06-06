@@ -89,4 +89,7 @@ dependencies {
     // https://mvnrepository.com/artifact/com.github.lovetuzitong/MultiImageSelector
     implementation 'com.github.lovetuzitong:MultiImageSelector:1.2'
 
+    // Apache Commons Lang: https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
+    implementation 'org.apache.commons:commons-lang3:3.12.0'
+
 }

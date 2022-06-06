@@ -29,13 +29,17 @@ public class RequestHeadersInterceptor implements Interceptor {
                 .newBuilder()
                 .addHeader("HOST", HOST)
                 .addHeader("Connection", "Keep-Alive");
-
-        if (TokenManager.getInstance().hasTokenInfo()) {
-            String authHeaderVal = TokenManager.getInstance().getTokenType()
-                                + " " + TokenManager.getInstance().getAccessToken();
-            builder.addHeader("Authorization", authHeaderVal);
-            LogUtils.d(LOG_TAG, "add header: Authorization=" + authHeaderVal);
+        // 如果请求头中不包含 'Authorization', 则添加 access_token
+        // 避免使用 refresh_token 刷新 token 时, 重复添加相同 Header 导致值被覆盖
+        if (!chain.request().headers().names().contains("Authorization")) {
+            if (TokenManager.getInstance().hasTokenInfo()) {
+                String authHeaderVal = TokenManager.getInstance().getTokenType()
+                        + " " + TokenManager.getInstance().getAccessToken();
+                builder.addHeader("Authorization", authHeaderVal);
+                LogUtils.d(LOG_TAG, "add header: Authorization=" + authHeaderVal);
+            }
         }
+
 
         return chain.proceed(builder.build());
     }

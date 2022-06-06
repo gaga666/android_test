@@ -6,7 +6,7 @@ import android.os.Handler;
 import android.os.HandlerThread;
 
 import com.example.charge.common.Constants;
-import com.example.charge.entity.TokenPairInfo;
+import com.example.charge.api.model.dto.TokenPairInfo;
 import com.example.charge.utils.LogUtils;
 
 public class TokenManager {

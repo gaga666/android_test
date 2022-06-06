@@ -1,4 +1,4 @@
-package com.example.charge.entity;
+package com.example.charge.api.model;
 
 
 public class DataResponse<T> extends MessageResponse {
@@ -11,22 +11,6 @@ public class DataResponse<T> extends MessageResponse {
         super(code, message);
         this.data = data;
     }
-
-//    public int getCode() {
-//        return code;
-//    }
-//
-//    public void setCode(int code) {
-//        this.code = code;
-//    }
-//
-//    public String getMessage() {
-//        return message;
-//    }
-//
-//    public void setMessage(String message) {
-//        this.message = message;
-//    }
 
     public T getData() {
         return data;

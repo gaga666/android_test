@@ -1,4 +1,4 @@
-package com.example.charge.entity;
+package com.example.charge.api.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
