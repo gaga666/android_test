@@ -78,7 +78,7 @@ public class LoginActivity extends AppCompatActivity {
 
         lg_password =  findViewById(R.id.lg_password);
         lg_userIcon = findViewById(R.id.lg_userIcon);
-        Glide.with(this).load("http://s0.objectspace.top/fs/avatar/no-avatar.jpg").into(lg_userIcon);
+//        Glide.with(this).load("http://s0.objectspace.top/fs/avatar/no-avatar.jpg").into(lg_userIcon);
 
         Button lg_login =  findViewById(R.id.lg_login);
         lg_login.setOnClickListener(view -> login());

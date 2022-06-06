@@ -122,11 +122,9 @@ public class uses_head extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.Q)
     private File uriToFile(final Uri uri) {
         File file = null;
-
         if (uri == null) {
             return null;
         }
-
         if (uri.getScheme().equals(ContentResolver.SCHEME_FILE)) {
             file = new File(uri.getPath());
         } else if (uri.getScheme().equals(ContentResolver.SCHEME_CONTENT)) {

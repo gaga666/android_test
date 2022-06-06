@@ -114,14 +114,13 @@ public class personalFragment extends Fragment implements AdapterView.OnItemClic
             }
         });
         return view;
-
     }
 
     private List<Map<String,Object>> getData(){
-        String[] titles = {"修改头像","修改密码","修改邮箱","搜索","注册新账号"};
-        int[] images = {R.drawable.username,R.drawable.password,R.drawable.e_mail,R.drawable.search,R.drawable.username};
+        String[] titles = {"修改头像","修改密码","修改邮箱","搜索","注册新账号","退出登录"};
+        int[] images = {R.drawable.username,R.drawable.password,R.drawable.e_mail,R.drawable.search,R.drawable.username,R.drawable.exit};
         List<Map<String,Object>> list=new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 6; i++) {
             Map map =new HashMap();
             map.put("image",images[i]);
             map.put("title",titles[i]);

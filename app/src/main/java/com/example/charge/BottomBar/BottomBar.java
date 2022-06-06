@@ -31,10 +31,6 @@ public class BottomBar extends AppCompatActivity {
     private List<Map<String, Object>> lists =new ArrayList<Map<String,Object>>();
     private SimpleAdapter adapter;
 
-    private String[] list_text1 = {"中考词汇","高考词汇","四级词汇","六级词汇","考研词汇","托福词汇","雅思词汇","GRE词汇"};
-    private String[] list_text2 = {"这里是中考考纲要求的词汇","这里是高考考纲要求的词汇","这里是四级考纲要求的词汇","这里是六级考纲要求的词汇","这里是研究生入学考试考纲要求的词汇","这里是托福考纲要求的词汇","这里是雅思考纲要求的词汇","这里是GRE考纲要求的词汇"};
-    private int[] list_image = new int[]{R.drawable.zk,R.drawable.gk,R.drawable.cet4,R.drawable.cet6,R.drawable.ky,R.drawable.tuofu,R.drawable.yasi,R.drawable.gre};
-    //此处暂时使用一个图片，后面要拓宽为图片组
     private FrameLayout bottom_bar_container;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
