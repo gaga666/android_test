@@ -1,12 +1,14 @@
 package com.example.charge.edit;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -14,11 +16,14 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.FileUtils;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.WindowManager;
+import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -28,7 +33,12 @@ import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
 import com.example.charge.R;
+import com.example.charge.utils.LogUtils;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Currency;
 import java.util.HashMap;
@@ -40,6 +50,7 @@ public class write_blog extends AppCompatActivity {
     private Button write_send;
     private GridView gridView;
     private final int IMAGE_OPEN = 1;
+    private File imageFile;
     private SimpleAdapter simpleAdapter;
     private ArrayList<HashMap<String ,Object>> imageItem;
     private String imagePath;
@@ -90,6 +101,7 @@ public class write_blog extends AppCompatActivity {
         });
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.Q)
     @SuppressLint("Range")
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -97,14 +109,15 @@ public class write_blog extends AppCompatActivity {
 
         if(resultCode==RESULT_OK && requestCode==IMAGE_OPEN){
             Uri uri = data.getData();
+            imageFile = uriToFile(uri);
             if(!TextUtils.isEmpty(uri.getAuthority())){
                 Cursor cursor = getContentResolver().query(uri,new String[]{MediaStore.Images.Media.DATA},null,null,null);
-
                 if (cursor == null){
                     return;
                 }
                 cursor.moveToFirst();
                 imagePath = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
+                LogUtils.log("imagePath-> "+imagePath);
             }
         }
     }
@@ -112,8 +125,8 @@ public class write_blog extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if(!TextUtils.isEmpty(imagePath)){
-            Bitmap addBmp = BitmapFactory.decodeFile(imagePath);
+        if(!TextUtils.isEmpty(String.valueOf(imageFile))){
+            Bitmap addBmp = BitmapFactory.decodeFile(String.valueOf(imageFile));
             HashMap<String, Object> map = new HashMap<String,Object>();
             map.put("itemImage",addBmp);
             imageItem.add(map);
@@ -131,7 +144,7 @@ public class write_blog extends AppCompatActivity {
             });
             gridView.setAdapter(simpleAdapter);
             simpleAdapter.notifyDataSetChanged();
-//            imagePath = null;
+            imagePath = null;
         }
     }
 
@@ -156,4 +169,41 @@ public class write_blog extends AppCompatActivity {
         builder.create().show();
     }
 
+    /**
+     * Android 10(Q)及以上 Uri to File
+     * @param uri
+     * @return
+     */
+    @RequiresApi(api = Build.VERSION_CODES.Q)
+    private File uriToFile(final Uri uri) {
+        File file = null;
+
+        if (uri == null) {
+            return null;
+        }
+
+        if (uri.getScheme().equals(ContentResolver.SCHEME_FILE)) {
+            file = new File(uri.getPath());
+        } else if (uri.getScheme().equals(ContentResolver.SCHEME_CONTENT)) {
+            // 把文件复制到沙盒目录
+            ContentResolver contentResolver = getContentResolver();
+            // tempName
+            String tempName =
+                    System.currentTimeMillis() + "_" + Math.round((Math.random() + 1) * 1000)
+                            + "." + MimeTypeMap.getSingleton().getExtensionFromMimeType(contentResolver.getType(uri));
+            LogUtils.log("tempName -> " + tempName);
+            try {
+                InputStream is = contentResolver.openInputStream(uri);
+                File cache = new File(getCacheDir().getAbsolutePath(), tempName);
+                FileOutputStream fos = new FileOutputStream(cache);
+                FileUtils.copy(is, fos);
+                file = cache;
+                fos.close();
+                is.close();
+            } catch (IOException e) {
+                LogUtils.error(e.getLocalizedMessage());
+            }
+        }
+        return file;
+    }
 }
