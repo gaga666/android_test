@@ -18,9 +18,9 @@ import com.example.charge.login.LoginActivity;
 import com.example.charge.utils.LogUtils;
 import com.example.charge.view.LoadingDialog;
 
-public class ChangeMailActivity extends BaseActivity {
+public class change_mail extends BaseActivity {
 
-    private static final String TAG = ChangeMailActivity.class.getName();
+    private static final String TAG = change_mail.class.getName();
 
     EditText mail_old_mail, mail_new_mail,mail_verify;
     Button mail_getVerify, mail_reset;
@@ -63,9 +63,9 @@ public class ChangeMailActivity extends BaseActivity {
                     // destroy loading dialog
                     stopLoading();
 
-                    Toast.makeText(ChangeMailActivity.this, "修改成功", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(change_mail.this, "修改成功", Toast.LENGTH_SHORT).show();
 
-                    Intent i = new Intent(ChangeMailActivity.this, LoginActivity.class);
+                    Intent i = new Intent(change_mail.this, LoginActivity.class);
                     startActivity(i);
                     overridePendingTransition(0, 0);
                 });
@@ -76,7 +76,7 @@ public class ChangeMailActivity extends BaseActivity {
                 LogUtils.e(TAG, "sendEmail().onFailure: " + log);
 
                 runOnUiThread(() -> {
-                    Toast.makeText(ChangeMailActivity.this, log, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(change_mail.this, log, Toast.LENGTH_SHORT).show();
                 });
             }
             @Override
@@ -100,7 +100,7 @@ public class ChangeMailActivity extends BaseActivity {
             @Override
             public void onSuccess() {
                 runOnUiThread(() -> {
-                    Toast.makeText(ChangeMailActivity.this, "邮箱已发送", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(change_mail.this, "邮箱已发送", Toast.LENGTH_SHORT).show();
                 });
             }
             @Override
@@ -109,7 +109,7 @@ public class ChangeMailActivity extends BaseActivity {
                 LogUtils.e(TAG, "sendEmail().onFailure: " + log);
 
                 runOnUiThread(() -> {
-                    Toast.makeText(ChangeMailActivity.this, log, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(change_mail.this, log, Toast.LENGTH_SHORT).show();
                 });
             }
             @Override

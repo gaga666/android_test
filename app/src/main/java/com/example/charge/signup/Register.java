@@ -9,6 +9,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.charge.BaseActivity;
 import com.example.charge.R;
 import com.example.charge.api.exception.ApiException;
 import com.example.charge.api.callback.ApiCallback;
@@ -18,7 +19,7 @@ import com.example.charge.login.LoginActivity;
 import com.example.charge.utils.LogUtils;
 import com.example.charge.view.LoadingDialog;
 
-public class Register extends AppCompatActivity {
+public class Register extends BaseActivity {
     private static final String TAG = Register.class.getName();
     EditText re_username, re_password, re_passwordSecond, re_mail, re_verify;
     LoadingDialog mLoadingDialog;

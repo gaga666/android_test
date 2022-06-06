@@ -16,15 +16,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.example.charge.BaseActivity;
 import com.example.charge.LoopView;
 import com.example.charge.R;
 import com.example.charge.TokenManager;
+import com.example.charge.api.Api;
 import com.example.charge.api.callback.ApiDataCallback;
 import com.example.charge.api.exception.ApiException;
-import com.example.charge.api.Api;
 import com.example.charge.api.model.dto.TokenPairInfo;
 import com.example.charge.api.model.dto.UserInfo;
 import com.example.charge.resetpassword;
@@ -32,7 +32,7 @@ import com.example.charge.signup.Register;
 import com.example.charge.utils.LogUtils;
 import com.example.charge.view.LoadingDialog;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends BaseActivity {
     private static final String TAG = LoginActivity.class.getName();
 
     // loading dialog

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.charge.BaseActivity;
 import com.example.charge.LoopView;
 import com.example.charge.MyApplication;
 import com.example.charge.R;
@@ -22,7 +23,7 @@ import com.example.charge.utils.LogUtils;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class SplashScreen extends AppCompatActivity {
+public class SplashScreen extends BaseActivity {
 
     private static final String TAG = SplashScreen.class.getName();
 
