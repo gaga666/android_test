@@ -21,24 +21,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.bumptech.glide.Glide;
 import com.example.charge.LoopView;
 import com.example.charge.R;
+import com.example.charge.TokenManager;
+import com.example.charge.api.callback.ApiDataCallback;
+import com.example.charge.api.ApiException;
 import com.example.charge.api.remote.Api;
-import com.example.charge.common.Constants;
-import com.example.charge.entity.DataResponse;
 import com.example.charge.entity.TokenPairInfo;
 import com.example.charge.entity.UserInfo;
 import com.example.charge.resetpassword;
 import com.example.charge.signup.Register;
 import com.example.charge.utils.LogUtils;
 import com.example.charge.view.LoadingDialog;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import java.io.IOException;
-
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Response;
-import okhttp3.ResponseBody;
 
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = LoginActivity.class.getName();
@@ -160,54 +152,42 @@ public class LoginActivity extends AppCompatActivity {
      * @param username 用户名
      */
     private void showAvatarOf(String username) {
-        Api.getUserInfoByUsername(username, new Callback() {
+        Api.getUserInfoByUsername(username, new ApiDataCallback<UserInfo>() {
             @Override
-            public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                LogUtils.e(TAG, e.toString());
-            }
-
-            @Override
-            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                ResponseBody resBody = response.body();
-                if (resBody != null) {
-                    String json = resBody.string();
-                    ObjectMapper mapper = new ObjectMapper();
-                    LogUtils.log("json -> " + json);
-                    DataResponse<UserInfo> res = mapper.readValue(json, new TypeReference<DataResponse<UserInfo>>(){});
-                    // get response code
-                    int code = res.getCode();
-                    // get response message
-                    String message = res.getMessage();
-                    LogUtils.i(TAG,
-                            String.format("login().onResponse: res.code -> %s, res.message -> %s", code, message)
-                    );
-
-                    UserInfo userInfo = res.getData();
-                    if (userInfo != null) {
-                        LogUtils.i(TAG, "login().onResponse: res.data -> "  + userInfo);
-                        String avatar = userInfo.getAvatar();
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Glide.with(LoginActivity.this)
-                                        .load(avatar)
-                                        .into(lg_userIcon);
-                            }
-                        });
-                    } else {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Glide.with(LoginActivity.this)
-                                        .load("http://s0.objectspace.top/fs/avatar/no-avatar.jpg")
-                                        .into(lg_userIcon);
-                            }
-                        });
+            public void onSuccess(@NonNull UserInfo data) {
+                String avatar = data.getAvatar();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Glide.with(LoginActivity.this)
+                                .load(avatar)
+                                .into(lg_userIcon);
                     }
-
-                } else {
-                    LogUtils.e(TAG, "login().onResponse: response.body() == null");
-                }
+                });
+            }
+            @Override
+            public void onFailure(int errCode, @NonNull String errMsg) {
+                LogUtils.e(TAG, "onFailure(): code == " + errCode + ", msg: " + errMsg);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Glide.with(LoginActivity.this)
+                                .load("http://s0.objectspace.top/fs/avatar/no-avatar.jpg")
+                                .into(lg_userIcon);
+                    }
+                });
+            }
+            @Override
+            public void onException(@NonNull ApiException e) {
+                LogUtils.e(TAG, "onError(): e -> " + e);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Glide.with(LoginActivity.this)
+                                .load("http://s0.objectspace.top/fs/avatar/no-avatar.jpg")
+                                .into(lg_userIcon);
+                    }
+                });
             }
         });
     }
@@ -221,76 +201,40 @@ public class LoginActivity extends AppCompatActivity {
         LogUtils.i(TAG, String.format("username -> %s, password -> %s", username, password));
         // show loading dialog
         showLoading();
-
-        Api.login(username, password, new Callback() {
+        Api.login(username, password, new ApiDataCallback<TokenPairInfo>() {
             @Override
-            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+            public void onSuccess(@NonNull TokenPairInfo data) {
+                // destroy loading dialog
+                stopLoading();
+                // 保存 Token
+                TokenManager.getInstance().updateInfo(data);
+                // 登录成功, 跳转到主界面
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        // destroy loading dialog
-                        stopLoading();
+                        Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
+                        Intent i = new Intent(LoginActivity.this, LoopView.class);
+                        startActivity(i);
+                        finish();
                     }
                 });
-                LogUtils.e(TAG, "login().onFailure: exception -> " + e);
             }
 
             @Override
-            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        // destroy loading dialog
-                        stopLoading();
-                    }
-                });
-                ResponseBody resBody = response.body();
-                if (resBody != null) {
-                    String json = resBody.string();
-                    ObjectMapper mapper = new ObjectMapper();
-                    LogUtils.log("json -> " + json);
-                    DataResponse<TokenPairInfo> res = mapper.readValue(json, new TypeReference<DataResponse<TokenPairInfo>>(){});
-                    // get response code
-                    int code = res.getCode();
-                    // get response message
-                    String message = res.getMessage();
-                    LogUtils.i(TAG,
-                            String.format("login().onResponse: res.code -> %s, res.message -> %s", code, message)
-                    );
+            public void onFailure(int errCode, @NonNull String errMsg) {
+                // destroy loading dialog
+                stopLoading();
+                LogUtils.d(TAG, "onFailure(): code: " + errCode);
+                LogUtils.d(TAG, "onFailure(): msg: " + errMsg);
+            }
 
-                    TokenPairInfo tokenPairInfo = res.getData();
-                    // 保存Token
-                    saveTokenPair(tokenPairInfo);
-
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(LoginActivity.this, message, Toast.LENGTH_SHORT).show();
-                            if (code == 0) {
-                                Intent i = new Intent(LoginActivity.this, LoopView.class);
-                                startActivity(i);
-//                                overridePendingTransition(0, 0);
-                                finish();
-                            }
-                        }
-                    });
-
-                } else {
-                    LogUtils.e(TAG, "login().onResponse: response.body() == null");
-                }
-
+            @Override
+            public void onException(@NonNull ApiException e) {
+                // destroy loading dialog
+                stopLoading();
+                LogUtils.e(TAG, "onError: e -> " + e );
             }
         });
-    }
-
-    private void saveTokenPair(TokenPairInfo tokenPairInfo) {
-        SharedPreferences sp = getSharedPreferences(Constants.SP_NAME_TOKEN_PAIR, MODE_PRIVATE);
-
-        SharedPreferences.Editor editor = sp.edit();
-        editor.putString(Constants.KEY_TOKEN_TYPE, tokenPairInfo.getTokenType());
-        editor.putString(Constants.KEY_ACCESS_TOKEN, tokenPairInfo.getAccessToken());
-        editor.putString(Constants.KEY_REFRESH_TOKEN, tokenPairInfo.getRefreshToken());
-        editor.apply();
     }
 
     private void showLoading() {
