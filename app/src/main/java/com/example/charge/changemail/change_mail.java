@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.charge.R;
 import com.example.charge.api.remote.Api;
-import com.example.charge.e_mail;
+import com.example.charge.E_mail;
 import com.example.charge.entity.MessageResponse;
 import com.example.charge.login.LoginActivity;
 import com.example.charge.utils.LogUtils;
@@ -104,7 +104,7 @@ public class change_mail extends AppCompatActivity {
     }
 
     public void send(String to) {
-        if(!e_mail.isValidEmail(to)){
+        if(!E_mail.isValidEmail(to)){
             Toast.makeText(this, "请输入有效邮箱", Toast.LENGTH_SHORT).show();
             return;
         }

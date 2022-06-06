@@ -12,9 +12,9 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.charge.R;
-import com.example.charge.fragment.addFragment;
-import com.example.charge.fragment.homeFragment;
-import com.example.charge.fragment.personalFragment;
+import com.example.charge.fragment.AddFragment;
+import com.example.charge.fragment.HomeFragment;
+import com.example.charge.fragment.PersonalFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,9 +25,9 @@ public class BottomBar extends AppCompatActivity {
     private TextView bottom_bar_1text,bottom_bar_2text,bottom_bar_3text;
     private ImageView bottom_bar_1image,bottom_bar_2image,bottom_bar_3image;
     private RelativeLayout bottom_bar_1btn,bottom_bar_2btn,bottom_bar_3btn;
-    private com.example.charge.fragment.homeFragment homeFragment;
-    private com.example.charge.fragment.addFragment addFragment;
-    private com.example.charge.fragment.personalFragment personalFragment;
+    private HomeFragment homeFragment;
+    private AddFragment addFragment;
+    private PersonalFragment personalFragment;
     private List<Map<String, Object>> lists =new ArrayList<Map<String,Object>>();
     private SimpleAdapter adapter;
 
@@ -38,9 +38,9 @@ public class BottomBar extends AppCompatActivity {
         setContentView(R.layout.activity_bottom_bar);
         initView();
         newsList();
-        homeFragment = new homeFragment();
-        addFragment = new addFragment();
-        personalFragment = new personalFragment();
+        homeFragment = new HomeFragment();
+        addFragment = new AddFragment();
+        personalFragment = new PersonalFragment();
 
     }
     private void newsList(){

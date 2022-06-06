@@ -118,7 +118,7 @@ public class resetpassword extends AppCompatActivity {
     }
 
     public void send(String to) {
-        if(!e_mail.isValidEmail(to)){
+        if(!E_mail.isValidEmail(to)){
             Toast.makeText(this, "请输入有效邮箱", Toast.LENGTH_SHORT).show();
             return;
         }

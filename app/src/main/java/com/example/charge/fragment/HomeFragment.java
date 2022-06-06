@@ -16,7 +16,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.charge.R;
-import com.example.charge.edit.write_blog;
+import com.example.charge.Home1;
+import com.example.charge.Home2;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,13 +26,13 @@ import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link addFragment#newInstance} factory method to
+ * Use the {@link HomeFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class addFragment extends Fragment {
-    private ListView add_listView;
+public class HomeFragment extends Fragment {
+    private List<Map<String, Object>> lists =new ArrayList<Map<String,Object>>();
+    private ListView home_list;
     private SimpleAdapter simpleAdapter;
-    private ImageView add_add;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -40,8 +41,9 @@ public class addFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    private TextView bar_add_text;
-    public addFragment() {
+    private TextView home_list_text1,home_list_text2;
+    private ImageView home_list_image;
+    public HomeFragment() {
         // Required empty public constructor
     }
 
@@ -51,11 +53,11 @@ public class addFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment addFragment.
+     * @return A new instance of fragment homeFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static addFragment newInstance(String param1, String param2) {
-        addFragment fragment = new addFragment();
+    public static HomeFragment newInstance(String param1, String param2) {
+        HomeFragment fragment = new HomeFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -76,36 +78,38 @@ public class addFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view= inflater.inflate(R.layout.fragment_add, container, false);
-        add_add = view.findViewById(R.id.add_add);
-        add_add.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), write_blog.class);
-                startActivity(intent);
-            }
-        });
-        add_listView = view.findViewById(R.id.add_list);
-        simpleAdapter = new SimpleAdapter(getActivity(),getData(),R.layout.add_list_view,new String[]{"title","image"},new int[]{R.id.add_list_text1,R.id.home_list_image});
-        add_listView.setAdapter(simpleAdapter);
+//        return inflater.inflate(R.layout.fragment_home, container, false);
+        View view = inflater.inflate(R.layout.fragment_home,container,false);
+        home_list = view.findViewById(R.id.home_list);
+        simpleAdapter = new SimpleAdapter(getActivity(),getData(),R.layout.home_listview,new String[]{"title","image1","image2","image3"},new int[]{R.id.home_list_text,R.id.home_list_image1,R.id.home_list_image2,R.id.home_list_image3});
+        home_list.setAdapter(simpleAdapter);
 
-        add_listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        home_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 switch (i){
-
+                    case 0:
+                        Intent intent = new Intent(getActivity(), Home1.class);
+                        startActivity(intent);
+                        break;
+                    case 1:
+                        Intent intent1 = new Intent(getActivity(), Home2.class);
+                        startActivity(intent1);
+                        break;
                 }
             }
         });
         return view;
     }
     private List<Map<String ,Object>> getData(){
-        String[] titles = {"关注1号","关注2号","关注3号"};
-        int[] images = {R.drawable.gk,R.drawable.zk,R.drawable.exit};
-        List<Map<String ,Object>> list = new ArrayList<>();
-        for (int i = 0; i < 3; i++) {
-            Map map = new HashMap();
-            map.put("image",images[i]);
+        String[] titles = {"从《共产党宣言》中汲取力量","山下红旗飘扬","test1","test2"};
+        int[] images = {R.drawable.username,R.drawable.password,R.drawable.e_mail,R.drawable.search};
+        List<Map<String,Object>> list=new ArrayList<>();
+        for (int i = 0; i < 4; i++) {
+            Map map =new HashMap();
+            map.put("image3",images[i]);
+            map.put("image2",images[i]);
+            map.put("image1",images[i]);
             map.put("title",titles[i]);
             list.add(map);
         }

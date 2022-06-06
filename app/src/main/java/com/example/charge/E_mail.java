@@ -3,7 +3,7 @@ package com.example.charge;
 import java.util.Properties;
 import java.util.regex.Pattern;
 
-public class e_mail {
+public class E_mail {
 
     private String PROTOCOL = "smtp";
     private String HOST = "smtp.qq.com";

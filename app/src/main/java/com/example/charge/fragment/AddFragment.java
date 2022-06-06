@@ -16,8 +16,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.charge.R;
-import com.example.charge.home1;
-import com.example.charge.home2;
+import com.example.charge.edit.write_blog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,18 +25,13 @@ import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link homeFragment#newInstance} factory method to
+ * Use the {@link AddFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class homeFragment extends Fragment {
-    private List<Map<String, Object>> lists =new ArrayList<Map<String,Object>>();
-    private SimpleAdapter adapter;
-    private ListView home_list;
+public class AddFragment extends Fragment {
+    private ListView add_listView;
     private SimpleAdapter simpleAdapter;
-    private String[] list_text1 = {"中考词汇","高考词汇","四级词汇","六级词汇","考研词汇","托福词汇","雅思词汇","GRE词汇"};
-    private String[] list_text2 = {"这里是中考考纲要求的词汇","这里是高考考纲要求的词汇","这里是四级考纲要求的词汇","这里是六级考纲要求的词汇","这里是研究生入学考试考纲要求的词汇","这里是托福考纲要求的词汇","这里是雅思考纲要求的词汇","这里是GRE考纲要求的词汇"};
-    private int[] list_image = new int[]{R.drawable.zk,R.drawable.gk,R.drawable.cet4,R.drawable.cet6,R.drawable.ky,R.drawable.tuofu,R.drawable.yasi,R.drawable.gre};
-    //此处暂时使用一个图片，后面要拓宽为图片组
+    private ImageView add_add;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -46,9 +40,8 @@ public class homeFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    private TextView home_list_text1,home_list_text2;
-    private ImageView home_list_image;
-    public homeFragment() {
+    private TextView bar_add_text;
+    public AddFragment() {
         // Required empty public constructor
     }
 
@@ -58,11 +51,11 @@ public class homeFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment homeFragment.
+     * @return A new instance of fragment addFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static homeFragment newInstance(String param1, String param2) {
-        homeFragment fragment = new homeFragment();
+    public static AddFragment newInstance(String param1, String param2) {
+        AddFragment fragment = new AddFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -83,35 +76,35 @@ public class homeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-//        return inflater.inflate(R.layout.fragment_home, container, false);
-        View view = inflater.inflate(R.layout.fragment_home,container,false);
-        home_list = view.findViewById(R.id.home_list);
-        simpleAdapter = new SimpleAdapter(getActivity(),getData(),R.layout.home_listview,new String[]{"title","image"},new int[]{R.id.home_list_text1,R.id.home_list_image});
-        home_list.setAdapter(simpleAdapter);
+        View view= inflater.inflate(R.layout.fragment_add, container, false);
+        add_add = view.findViewById(R.id.add_add);
+        add_add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), write_blog.class);
+                startActivity(intent);
+            }
+        });
+        add_listView = view.findViewById(R.id.add_list);
+        simpleAdapter = new SimpleAdapter(getActivity(),getData(),R.layout.add_list_view,new String[]{"title","image"},new int[]{R.id.add_list_text1,R.id.add_list_image});
+        add_listView.setAdapter(simpleAdapter);
 
-        home_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        add_listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 switch (i){
-                    case 0:
-                        Intent intent = new Intent(getActivity(), home1.class);
-                        startActivity(intent);
-                        break;
-                    case 1:
-                        Intent intent1 = new Intent(getActivity(), home2.class);
-                        startActivity(intent1);
-                        break;
+
                 }
             }
         });
         return view;
     }
     private List<Map<String ,Object>> getData(){
-        String[] titles = {"从《共产党宣言》中汲取力量","山下红旗飘扬","test1","test2"};
-        int[] images = {R.drawable.username,R.drawable.password,R.drawable.e_mail,R.drawable.search,R.drawable.username};
-        List<Map<String,Object>> list=new ArrayList<>();
-        for (int i = 0; i < 4; i++) {
-            Map map =new HashMap();
+        String[] titles = {"关注1号","关注2号","关注3号"};
+        int[] images = {R.drawable.gk,R.drawable.zk,R.drawable.exit};
+        List<Map<String ,Object>> list = new ArrayList<>();
+        for (int i = 0; i < 3; i++) {
+            Map map = new HashMap();
             map.put("image",images[i]);
             map.put("title",titles[i]);
             list.add(map);

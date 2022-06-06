@@ -29,10 +29,10 @@ import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link personalFragment#newInstance} factory method to
+ * Use the {@link PersonalFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class personalFragment extends Fragment implements AdapterView.OnItemClickListener {
+public class PersonalFragment extends Fragment implements AdapterView.OnItemClickListener {
     ListView listView;
     SimpleAdapter simpleAdapter;
     ImageView personal_head;
@@ -43,7 +43,7 @@ public class personalFragment extends Fragment implements AdapterView.OnItemClic
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    public personalFragment() {
+    public PersonalFragment() {
         // Required empty public constructor
     }
 
@@ -56,8 +56,8 @@ public class personalFragment extends Fragment implements AdapterView.OnItemClic
      * @return A new instance of fragment personalFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static personalFragment newInstance(String param1, String param2) {
-        personalFragment fragment = new personalFragment();
+    public static PersonalFragment newInstance(String param1, String param2) {
+        PersonalFragment fragment = new PersonalFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);

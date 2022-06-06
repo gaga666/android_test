@@ -39,10 +39,10 @@
             android:exported="false"
             android:parentActivityName=".login.LoginActivity" />
         <activity
-            android:name=".home2"
+            android:name=".Home2"
             android:exported="false" />
         <activity
-            android:name=".home1"
+            android:name=".Home1"
             android:exported="false" />
         <activity
             android:name=".search"
