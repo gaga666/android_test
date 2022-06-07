@@ -3,6 +3,7 @@ package com.example.charge.fragment;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -18,6 +19,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
@@ -138,14 +140,15 @@ public class PersonalFragment extends Fragment implements AdapterView.OnItemClic
                         startActivity(intent4);
                         break;
                     case 5:
+                        diaLog();
                         // 清理 TOKEN 信息
-                        TokenManager.getInstance().clearInfo();
-                        // 清理用户信息
-                        UserInfoManager.getInstance().clearInfo();
-                        // 关闭所有 Activity
-                        ActivityCollector.finishAll();
-                        Intent intent5 = new Intent(getActivity(), LoginActivity.class);
-                        startActivity(intent5);
+//                        TokenManager.getInstance().clearInfo();
+//                        // 清理用户信息
+//                        UserInfoManager.getInstance().clearInfo();
+//                        // 关闭所有 Activity
+//                        ActivityCollector.finishAll();
+//                        Intent intent5 = new Intent(getActivity(), LoginActivity.class);
+//                        startActivity(intent5);
                         break;
                 }
             }
@@ -153,6 +156,30 @@ public class PersonalFragment extends Fragment implements AdapterView.OnItemClic
         return view;
     }
 
+    private void diaLog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage("确认退出登录？");
+        builder.setTitle("提示");
+        builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                TokenManager.getInstance().clearInfo();
+                // 清理用户信息
+                UserInfoManager.getInstance().clearInfo();
+                // 关闭所有 Activity
+                ActivityCollector.finishAll();
+                Intent intent5 = new Intent(getActivity(), LoginActivity.class);
+                startActivity(intent5);
+            }
+        });
+        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+        builder.create().show();
+    }
     private List<Map<String,Object>> getData(){
         String[] titles = {"修改头像","修改密码","修改邮箱","搜索","注册新账号","退出登录"};
         int[] images = {R.drawable.username,R.drawable.password,R.drawable.e_mail,R.drawable.search,R.drawable.username,R.drawable.exit};
