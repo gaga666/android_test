@@ -5,11 +5,11 @@ import android.webkit.MimeTypeMap;
 import androidx.annotation.NonNull;
 
 import com.example.charge.TokenManager;
-import com.example.charge.api.exception.ApiException;
 import com.example.charge.api.callback.ApiCallback;
 import com.example.charge.api.callback.ApiDataCallback;
 import com.example.charge.api.enums.ApiUrlEnum;
 import com.example.charge.api.enums.ResponseEnum;
+import com.example.charge.api.exception.ApiException;
 import com.example.charge.api.model.DataResponse;
 import com.example.charge.api.model.MessageResponse;
 import com.example.charge.api.model.dto.ImageInfo;
@@ -27,9 +27,9 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
-import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import okhttp3.internal.Util;
 
 public class Api {
 
@@ -101,7 +101,7 @@ public class Api {
     }
 
     public static void logout(ApiCallback apiCallback) {
-        ApiHttpClient.asyncPost(ApiUrlEnum.LOGOUT.getUrl(), RequestBody.create("", null), null, new Callback() {
+        ApiHttpClient.asyncPost(ApiUrlEnum.LOGOUT.getUrl(), Util.EMPTY_REQUEST, null, new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
                 LogUtils.e(LOG_TAG, "logout.onFailure(): e -> " + e);
