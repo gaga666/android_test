@@ -92,4 +92,5 @@ dependencies {
     // Apache Commons Lang: https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
     implementation 'org.apache.commons:commons-lang3:3.12.0'
 
+    implementation 'com.github.wangfeng19930909:DragFloatingActionButton:1.0.1'
 }

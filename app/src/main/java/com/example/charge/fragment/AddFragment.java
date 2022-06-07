@@ -15,8 +15,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.barnettwong.dragfloatactionbuttonlibrary.view.DragFloatActionButton;
 import com.example.charge.R;
 import com.example.charge.edit.write_blog;
+import com.example.charge.search.search;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,7 +33,7 @@ import java.util.Map;
 public class AddFragment extends Fragment {
     private ListView add_listView;
     private SimpleAdapter simpleAdapter;
-    private ImageView add_add;
+    private DragFloatActionButton search_user;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -77,11 +79,12 @@ public class AddFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_add, container, false);
-        add_add = view.findViewById(R.id.add_add);
-        add_add.setOnClickListener(new View.OnClickListener() {
+
+        search_user = view.findViewById(R.id.search_user);
+        search_user.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), write_blog.class);
+                Intent intent = new Intent(getActivity(), search.class);
                 startActivity(intent);
             }
         });

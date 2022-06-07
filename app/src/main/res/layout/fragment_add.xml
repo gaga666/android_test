@@ -19,11 +19,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
-    <ImageView
-        android:id="@+id/add_add"
-        android:layout_below="@+id/add_list"
-        android:layout_width="80dp"
+
+    <com.barnettwong.dragfloatactionbuttonlibrary.view.DragFloatActionButton
+        android:id="@+id/search_user"
+        android:layout_width="60dp"
         android:layout_alignParentRight="true"
-        android:src="@drawable/add"
-        android:layout_height="80dp"/>
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20dp"
+        android:layout_marginRight="20dp"
+        android:clickable="true"
+        android:src="@drawable/search_user"
+        android:layout_height="60dp"/>
 </RelativeLayout>

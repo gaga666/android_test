@@ -134,14 +134,10 @@ public class PersonalFragment extends Fragment implements AdapterView.OnItemClic
                         startActivity(intent2);
                         break;
                     case 3:
-                        Intent intent3 = new Intent(getActivity(), search.class);
-                        startActivity(intent3);
-                        break;
-                    case 4:
                         Intent intent4 = new Intent(getActivity(), Register.class);
                         startActivity(intent4);
                         break;
-                    case 5:
+                    case 4:
                         diaLog();
                         // 清理 TOKEN 信息
 //                        TokenManager.getInstance().clearInfo();
@@ -206,10 +202,10 @@ public class PersonalFragment extends Fragment implements AdapterView.OnItemClic
     }
 
     private List<Map<String,Object>> getData(){
-        String[] titles = {"修改头像","修改密码","修改邮箱","搜索","注册新账号","退出登录"};
-        int[] images = {R.drawable.username,R.drawable.password,R.drawable.e_mail,R.drawable.search,R.drawable.username,R.drawable.exit};
+        String[] titles = {"修改头像","修改密码","修改邮箱","注册新账号","退出登录"};
+        int[] images = {R.drawable.username,R.drawable.password,R.drawable.e_mail,R.drawable.username,R.drawable.exit};
         List<Map<String,Object>> list=new ArrayList<>();
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 5; i++) {
             Map map =new HashMap();
             map.put("image",images[i]);
             map.put("title",titles[i]);
