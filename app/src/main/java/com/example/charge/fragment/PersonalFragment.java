@@ -7,7 +7,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -27,10 +26,13 @@ import com.example.charge.ActivityCollector;
 import com.example.charge.R;
 import com.example.charge.TokenManager;
 import com.example.charge.UserInfoManager;
+import com.example.charge.api.Api;
+import com.example.charge.api.callback.ApiCallback;
+import com.example.charge.api.exception.ApiException;
 import com.example.charge.changemail.ChangeMailActivity;
 import com.example.charge.changepwd.ChangePwdActivity;
 import com.example.charge.login.LoginActivity;
-import com.example.charge.search;
+import com.example.charge.search.search;
 import com.example.charge.signup.Register;
 import com.example.charge.changeavatar.ChangeAvatarActivity;
 
@@ -163,13 +165,7 @@ public class PersonalFragment extends Fragment implements AdapterView.OnItemClic
         builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                TokenManager.getInstance().clearInfo();
-                // 清理用户信息
-                UserInfoManager.getInstance().clearInfo();
-                // 关闭所有 Activity
-                ActivityCollector.finishAll();
-                Intent intent5 = new Intent(getActivity(), LoginActivity.class);
-                startActivity(intent5);
+                Logout();
             }
         });
         builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -180,6 +176,35 @@ public class PersonalFragment extends Fragment implements AdapterView.OnItemClic
         });
         builder.create().show();
     }
+    private void Logout(){
+        Api.logout(new ApiCallback() {
+            @Override
+            public void onSuccess() {
+                getActivity().runOnUiThread(() -> {
+                    TokenManager.getInstance().clearInfo();
+                    // 清理用户信息
+                    UserInfoManager.getInstance().clearInfo();
+                    // 关闭所有 Activity
+                    ActivityCollector.finishAll();
+                    Intent intent5 = new Intent(getActivity(), LoginActivity.class);
+                    startActivity(intent5);
+                });
+            }
+
+            @Override
+            public void onFailure(int errCode, @NonNull String errMsg) {
+                /**
+                 * TODO
+                 */
+//                Toast.makeText(getActivity(), errCode+errMsg, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onException(@NonNull ApiException e) {
+            }
+        });
+    }
+
     private List<Map<String,Object>> getData(){
         String[] titles = {"修改头像","修改密码","修改邮箱","搜索","注册新账号","退出登录"};
         int[] images = {R.drawable.username,R.drawable.password,R.drawable.e_mail,R.drawable.search,R.drawable.username,R.drawable.exit};

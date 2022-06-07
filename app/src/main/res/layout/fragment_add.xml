@@ -13,6 +13,7 @@
 <!--        android:textSize="25dp"-->
 <!--        android:layout_gravity="center"-->
 <!--        android:text="添加" />-->
+
     <ListView
         android:id="@+id/add_list"
         android:layout_width="match_parent"

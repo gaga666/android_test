@@ -20,17 +20,25 @@ import androidx.annotation.NonNull;
 import com.bumptech.glide.Glide;
 import com.example.charge.BaseActivity;
 import com.example.charge.LoopView;
+import com.example.charge.MyApplication;
 import com.example.charge.R;
 import com.example.charge.TokenManager;
+import com.example.charge.UserInfoManager;
 import com.example.charge.api.Api;
 import com.example.charge.api.callback.ApiDataCallback;
+import com.example.charge.api.enums.ResponseEnum;
 import com.example.charge.api.exception.ApiException;
 import com.example.charge.api.model.dto.TokenPairInfo;
 import com.example.charge.api.model.dto.UserInfo;
 import com.example.charge.changepwd.ChangePwdActivity;
+import com.example.charge.common.Constants;
 import com.example.charge.signup.Register;
+import com.example.charge.splashscreen.SplashScreen;
 import com.example.charge.utils.LogUtils;
 import com.example.charge.view.LoadingDialog;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class LoginActivity extends BaseActivity {
     private static final String TAG = LoginActivity.class.getName();
@@ -209,6 +217,7 @@ public class LoginActivity extends BaseActivity {
                 // 保存 Token
                 TokenManager.getInstance().updateInfo(data);
                 // 登录成功, 跳转到主界面
+                getUserInfo();
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -233,6 +242,32 @@ public class LoginActivity extends BaseActivity {
                 // destroy loading dialog
                 stopLoading();
                 LogUtils.e(TAG, "onError: e -> " + e );
+            }
+        });
+    }
+
+    private void getUserInfo(){
+        Api.getMyInfo(new ApiDataCallback<UserInfo>() {
+            @Override
+            public void onSuccess(@NonNull UserInfo data) {
+                // TODO: 保存用户信息
+                UserInfoManager.getInstance().updateInfo(data);
+            }
+            @Override
+            public void onFailure(int errCode, @NonNull String errMsg) {
+                if (errCode == ResponseEnum.INVALID_TOKEN.getCode()) {
+                    // access_token 提前失效(Reuse detection):
+                    // 发送全局广播强制登出
+                    LogUtils.log("发送全局广播强制登出");
+                    MyApplication.getContext()
+                            .sendBroadcast(new Intent(Constants.INTENT_ACTION_FORCE_LOGOUT));
+                    // 清理失效的 token 信息
+                    TokenManager.getInstance().clearInfo();
+                }
+            }
+            @Override
+            public void onException(@NonNull ApiException e) {
+                LogUtils.e(TAG, "onException: e -> " + e);
             }
         });
     }

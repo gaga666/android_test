@@ -45,7 +45,7 @@
             android:name=".Home1"
             android:exported="false" />
         <activity
-            android:name=".search"
+            android:name=".search.search"
             android:exported="false" />
         <activity
             android:name=".changemail.ChangeMailActivity"

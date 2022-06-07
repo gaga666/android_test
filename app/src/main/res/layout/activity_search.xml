@@ -4,22 +4,51 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".search">
+    tools:context=".search.search">
 
-    <LinearLayout
+    <RelativeLayout
+        android:id="@+id/search_result"
         android:layout_margin="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <android.widget.SearchView
             android:id="@+id/search_edit"
-            android:layout_width="0dp"
-            android:layout_weight="1"
+            android:layout_margin="10dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+        <LinearLayout
+            android:layout_below="@+id/search_edit"
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_height="80dp">
 
-    </LinearLayout>
+            <ImageView
+                android:id="@+id/search_image"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="2" />
+            <LinearLayout
+                android:layout_weight="6"
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
+                <TextView
+                    android:id="@+id/search_text1"
+                    android:layout_width="match_parent"
+                    android:layout_weight="5"
+                    android:layout_height="wrap_content"/>
+                <TextView
+                    android:id="@+id/search_text2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="5"/>
+            </LinearLayout>
+        </LinearLayout>
+    </RelativeLayout>
     <ListView
+        android:layout_below="@+id/search_result"
         android:id="@+id/search_list"
-        android:layout_marginTop="60dp"
+        android:layout_margin="10dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 </RelativeLayout>
