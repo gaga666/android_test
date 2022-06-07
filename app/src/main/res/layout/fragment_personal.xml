@@ -24,6 +24,7 @@
                 android:id="@+id/personal_avatar"
                 android:layout_width="120dp"
                 android:layout_height="120dp" />
+
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_weight="1"

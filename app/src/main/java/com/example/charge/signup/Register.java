@@ -19,6 +19,8 @@ import com.example.charge.login.LoginActivity;
 import com.example.charge.utils.LogUtils;
 import com.example.charge.view.LoadingDialog;
 
+import java.util.regex.Pattern;
+
 public class Register extends BaseActivity {
     private static final String TAG = Register.class.getName();
     EditText re_username, re_password, re_passwordSecond, re_mail, re_verify;
@@ -38,6 +40,14 @@ public class Register extends BaseActivity {
         re_getVerify.setOnClickListener(view -> sendEmail(re_mail.getText().toString()));
     }
 
+    private boolean isUsername(String username){
+        if (username ==null){
+            return false;
+        }
+        Pattern pattern = Pattern.compile("^.{3,20}$");
+        return pattern.matcher(username).matches();
+    }
+
     /**
      * 注册新用户
      */
@@ -46,6 +56,10 @@ public class Register extends BaseActivity {
         String password = re_password.getText().toString();
         String mail = re_mail.getText().toString();
         String code = re_verify.getText().toString();
+        if (!isUsername(username)){
+            Toast.makeText(this, "用户名长度为3~20位字符", Toast.LENGTH_SHORT).show();
+            return;
+        }
         LogUtils.i(TAG, String.format("username -> %s, password -> %s, mail -> %s, code -> %s", username, password,mail,code));
 
         // show loading dialog

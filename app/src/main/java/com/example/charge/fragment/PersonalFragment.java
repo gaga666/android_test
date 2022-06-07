@@ -46,6 +46,7 @@ import java.util.Map;
  * Use the {@link PersonalFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
+
 public class PersonalFragment extends Fragment implements AdapterView.OnItemClickListener {
     ListView listView;
     SimpleAdapter simpleAdapter;
