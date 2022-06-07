@@ -101,10 +101,10 @@ public class Api {
     }
 
     public static void logout(ApiCallback apiCallback) {
-        ApiHttpClient.asyncPost(ApiUrlEnum.LOGOUT.getUrl(), new HashMap<>(0), null, new Callback() {
+        ApiHttpClient.asyncPost(ApiUrlEnum.LOGOUT.getUrl(), RequestBody.create("", null), null, new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                LogUtils.e(LOG_TAG, "login.onFailure(): e -> " + e);
+                LogUtils.e(LOG_TAG, "logout.onFailure(): e -> " + e);
                 apiCallback.onException(new ApiException(e));
             }
             @Override
