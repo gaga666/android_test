@@ -1,21 +1,26 @@
 package com.example.charge.changeavatar;
 
-import android.annotation.SuppressLint;
+import android.Manifest;
 import android.content.ContentResolver;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.FileUtils;
-import android.provider.MediaStore;
 import android.view.View;
 import android.webkit.MimeTypeMap;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.FileProvider;
 
 import com.example.charge.BaseActivity;
 import com.example.charge.R;
@@ -26,6 +31,7 @@ import com.example.charge.api.exception.ApiException;
 import com.example.charge.api.model.dto.ImageInfo;
 import com.example.charge.api.model.dto.UserInfo;
 import com.example.charge.utils.LogUtils;
+import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -33,57 +39,153 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class ChangeAvatarActivity extends BaseActivity {
-    protected static final int CHOOSE_PICTURE = 0;
-    protected static final int TAKE_PICTURE = 1;
-    private static final int CROP_SMALL_PICTURE = 2;
+
     private static final String TAG = ChangeAvatarActivity.class.getName();
-    protected static Uri tempUri;
-    Button use_change;
-    ImageView use_image;
+
+    private ActivityResultLauncher<String> mReqPermissionLauncher;
+    private ActivityResultLauncher<String> mGetContentLauncher;
+    private ActivityResultLauncher<Uri> mTakePictureLauncher;
+    private ActivityResultLauncher<Intent> mStartActivityLauncher;
+
+    private File mCropCacheFile;
+    private File mCameraCacheFile;
+
+    private ImageView mAvatarIV;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_uses_head);
-        use_image = findViewById(R.id.use_image);
-        use_change = findViewById(R.id.use_change);
-        use_change.setOnClickListener(new View.OnClickListener() {
+        setContentView(R.layout.activity_change_avatar);
+
+        mAvatarIV = findViewById(R.id.avatar_preview);
+        findViewById(R.id.select_avatar).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-//                 showChoosePicDialog(view);
-                Intent intent = new Intent(Intent.ACTION_PICK,null);
-                intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,"image/*");
-                startActivityForResult(intent, 2);
+            public void onClick(View v) {
+                showChooseDialog();
             }
         });
+        findViewById(R.id.upload_avatar).setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.Q)
+            @Override
+            public void onClick(View view) {
+                if (mCropCacheFile != null && mCropCacheFile.exists()) {
+                    uploadAvatar();
+                } else {
+                    Toast.makeText(ChangeAvatarActivity.this, "请先选择头像", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        mGetContentLauncher = registerForActivityResult(new ActivityResultContracts.GetContent(),
+                new ActivityResultCallback<Uri>() {
+                    @Override
+                    public void onActivityResult(Uri uri) {
+                        startUCrop(uri);
+                    }
+                });
+        mReqPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(),
+                new ActivityResultCallback<Boolean>() {
+                    @Override
+                    public void onActivityResult(Boolean isGranted) {
+                        if (isGranted) {
+                            // 授权后打开相机拍照
+                            mCameraCacheFile = new File(getCacheDir(), "camera_cache_file.jpg");
+                            String authority = "com.example.charge.fileprovider";
+                            Uri uri = FileProvider.getUriForFile(ChangeAvatarActivity.this, authority, mCameraCacheFile);
+                            mTakePictureLauncher.launch(uri);
+                        }
+                    }
+                });
+        mTakePictureLauncher = registerForActivityResult(new ActivityResultContracts.TakePicture(),
+                new ActivityResultCallback<Boolean>() {
+                    @Override
+                    public void onActivityResult(Boolean success) {
+                        if (success) {
+                            String authority = "com.example.charge.fileprovider";
+                            Uri uri = FileProvider.getUriForFile(ChangeAvatarActivity.this, authority, mCameraCacheFile);
+                            startUCrop(uri);
+                        }
+                    }
+                });
+        mStartActivityLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        if (result.getResultCode() == RESULT_OK) {
+                            final Uri resultUri = UCrop.getOutput(result.getData());
+                            mAvatarIV.setImageURI(resultUri);
+                        } else if (result.getResultCode() == UCrop.RESULT_ERROR) {
+                            final Throwable cropError = UCrop.getError(result.getData());
+                        }
+                    }
+                });
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.Q)
-    @SuppressLint("MissingSuperCall")
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 2) {
-           if (data != null){
-               Uri uri = data.getData();
-               use_image.setImageURI(uri);
-               // 上传
-               changeAvatar(uri);
-           }
-        }
+    /**
+     * 裁剪图片: UCrop
+     * @param sourceUri
+     */
+    private void startUCrop(Uri sourceUri) {
+        ContentResolver contentResolver = getContentResolver();
+        String ext = MimeTypeMap.getSingleton().getExtensionFromMimeType(contentResolver.getType(sourceUri));
+        // cache file
+        String filename =
+                System.currentTimeMillis() + "_" + Math.round((Math.random() + 1) * 1000)
+                        + "." + ext;
+        mCropCacheFile = new File(getCacheDir(), filename);
+        String authority = "com.example.charge.fileprovider";
+        Uri destUri = FileProvider.getUriForFile(ChangeAvatarActivity.this, authority, mCropCacheFile);
+        Intent intent = UCrop.of(sourceUri, destUri)
+                .withAspectRatio(1, 1)
+                .withMaxResultSize(300, 300)
+                .getIntent(ChangeAvatarActivity.this);
+        mStartActivityLauncher.launch(intent);
+    }
+
+    private void chooseFromLocalContent() {
+        mGetContentLauncher.launch("image/*");
+    }
+
+    private void chooseFromTakePicture() {
+        mReqPermissionLauncher.launch(Manifest.permission.CAMERA);
+    }
+
+    /**
+     * 显示修改头像的对话框
+     */
+    public void showChooseDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("设置头像");
+        String[] items = { "选择本地照片", "拍照" };
+        builder.setNegativeButton("取消", null);
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case 0: // 选择本地照片
+                        chooseFromLocalContent();
+                        break;
+                    case 1: // 拍照
+                        chooseFromTakePicture();
+                        break;
+                }
+            }
+        });
+        builder.create().show();
     }
 
     /**
      * 上传图片
-     * @param uri
+     * @param
      */
     @RequiresApi(api = Build.VERSION_CODES.Q)
-    private void changeAvatar(Uri uri) {
-        File file = uriToFile(uri);
-        Api.changeAvatar(file, new ApiDataCallback<ImageInfo>() {
+    private void uploadAvatar() {
+        Api.changeAvatar(mCropCacheFile, new ApiDataCallback<ImageInfo>() {
             @Override
             public void onSuccess(@NonNull ImageInfo data) {
                 runOnUiThread(() -> {
                     Toast.makeText(ChangeAvatarActivity.this, "上传成功", Toast.LENGTH_SHORT).show();
+                    finish();
                 });
                 UserInfo newUserInfo = new UserInfo()
                         .setAvatar(data.getImageUrl())
@@ -91,8 +193,6 @@ public class ChangeAvatarActivity extends BaseActivity {
                         .setUsername(UserInfoManager.getInstance().getUsername())
                         .setUid(UserInfoManager.getInstance().getUid());
                 UserInfoManager.getInstance().updateInfo(newUserInfo);
-                // 删除缓存文件
-                file.delete();
             }
             @Override
             public void onFailure(int errCode, @NonNull String errMsg) {
@@ -100,20 +200,31 @@ public class ChangeAvatarActivity extends BaseActivity {
                 LogUtils.e(TAG, "changeAvatar().onFailure: " + log);
                 runOnUiThread(() -> {
                     Toast.makeText(ChangeAvatarActivity.this, log, Toast.LENGTH_SHORT).show();
+                    finish();
                 });
-                // 删除缓存文件
-                file.delete();
             }
             @Override
             public void onException(@NonNull ApiException e) {
                 LogUtils.e(TAG, "changeAvatar().onException: e -> " + e);
                 runOnUiThread(() -> {
                     Toast.makeText(ChangeAvatarActivity.this, "上传失败", Toast.LENGTH_SHORT).show();
+                    finish();
                 });
-                // 删除缓存文件
-                file.delete();
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // 删除缓存文件
+        if (mCropCacheFile != null) {
+            mCropCacheFile.delete();
+        }
+        if (mCameraCacheFile != null) {
+            mCameraCacheFile.delete();
+        }
+        LogUtils.d(TAG, "删除缓存文件");
     }
 
     /**
@@ -153,33 +264,7 @@ public class ChangeAvatarActivity extends BaseActivity {
     }
 }
 
-//    /**
-//     * 显示修改头像的对话框
-//     */
-//    public void showChoosePicDialog(View v) {
-//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//        builder.setTitle("设置头像");
-//        String[] items = { "选择本地照片", "拍照" };
-//        builder.setNegativeButton("取消", null);
-//        builder.setItems(items, new DialogInterface.OnClickListener() {
-//
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                switch (which) {
-//                    case CHOOSE_PICTURE: // 选择本地照片
-//                        Intent openAlbumIntent = new Intent(
-//                                Intent.ACTION_GET_CONTENT);
-//                        openAlbumIntent.setType("image/*");
-//                        startActivityForResult(openAlbumIntent, CHOOSE_PICTURE);
-//                        break;
-//                    case TAKE_PICTURE: // 拍照
-//                        takePicture();
-//                        break;
-//                }
-//            }
-//        });
-//        builder.create().show();
-//    }
+
 //
 //    private void takePicture() {
 //        String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE};

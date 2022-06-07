@@ -93,4 +93,7 @@ dependencies {
     implementation 'org.apache.commons:commons-lang3:3.12.0'
 
     implementation 'com.github.wangfeng19930909:DragFloatingActionButton:1.0.1'
+
+    // uCrop: https://github.com/Yalantis/uCrop
+    implementation 'com.github.yalantis:ucrop:2.2.6'
 }
