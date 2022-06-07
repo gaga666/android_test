@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 public class search extends BaseActivity {
     ImageView search_image;
@@ -50,11 +51,48 @@ public class search extends BaseActivity {
         search_edit.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
-                searchUser(s);
+                if (!isUID(s)) {
+                    searchUsername(s);
+                }else {
+                    String str = s.substring(4,5);
+                    searchUID(Long.parseLong(str));
+                }
                 return false;
             }
+            public void searchUID(Long uid){
+                Api.getUserInfoByUid(uid, new ApiDataCallback<UserInfo>() {
+                    @Override
+                    public void onSuccess(@NonNull UserInfo data) {
+                        String avatar = data.getAvatar();
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Glide.with(search.this).load(avatar).into(search_image);
+                                search_text1.setText("username:  " + data.getUsername());
+                                search_text2.setText("uid :   "+data.getUid().toString());
+                            }
+                        });
+                    }
 
-            public void searchUser(String username){
+                    @Override
+                    public void onFailure(int errCode, @NonNull String errMsg) {
+
+                    }
+
+                    @Override
+                    public void onException(@NonNull ApiException e) {
+
+                    }
+                });
+            }
+            public boolean isUID(String s){
+                if (s ==null){
+                    return false;
+                }
+                Pattern pattern = Pattern.compile("^UID:\\S$");
+                return pattern.matcher(s).matches();
+            }
+            public void searchUsername(String username){
                 Api.getUserInfoByUsername(username,new ApiDataCallback<UserInfo>(){
 
                     @Override
