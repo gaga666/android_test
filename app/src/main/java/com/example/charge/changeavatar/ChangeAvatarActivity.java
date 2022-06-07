@@ -80,7 +80,9 @@ public class ChangeAvatarActivity extends BaseActivity {
                 new ActivityResultCallback<Uri>() {
                     @Override
                     public void onActivityResult(Uri uri) {
-                        startUCrop(uri);
+                        if (uri != null) {
+                            startUCrop(uri);
+                        }
                     }
                 });
         mReqPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(),
@@ -103,7 +105,9 @@ public class ChangeAvatarActivity extends BaseActivity {
                         if (success) {
                             String authority = "com.example.charge.fileprovider";
                             Uri uri = FileProvider.getUriForFile(ChangeAvatarActivity.this, authority, mCameraCacheFile);
-                            startUCrop(uri);
+                            if (uri != null) {
+                                startUCrop(uri);
+                            }
                         }
                     }
                 });
