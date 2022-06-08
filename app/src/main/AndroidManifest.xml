@@ -30,7 +30,8 @@
         </provider>
         <activity
             android:name=".edit.write_blog"
-            android:exported="false" />
+            android:exported="false"/>
+<!--            android:theme="@style/Theme.AppCompat.Light.DarkActionBar"/>-->
         <activity
             android:name=".splashscreen.SplashScreen"
             android:exported="true">
@@ -52,16 +53,19 @@
             android:exported="false" />
         <activity
             android:name=".Home1"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar"/>
         <activity
             android:name=".search.search"
-            android:exported="false" />
+            android:exported="false"/>
+<!--            android:theme="@style/Theme.AppCompat.Light.DarkActionBar"/>-->
         <activity
             android:name=".changemail.ChangeMailActivity"
             android:exported="false" />
         <activity
             android:name=".BottomBar.BottomBar"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar"/>
         <activity
             android:name=".changeavatar.ChangeAvatarActivity"
             android:exported="false" />

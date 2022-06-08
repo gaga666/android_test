@@ -100,4 +100,6 @@ dependencies {
 //    implementation('org.sufficientlysecure:html-textview:4.0')
 
     implementation('de.hdodenhof:circleimageview:3.1.0')
+
+    implementation('com.github.TR4Android:AppCompat-Extension-Library:v0.5.1')
 }

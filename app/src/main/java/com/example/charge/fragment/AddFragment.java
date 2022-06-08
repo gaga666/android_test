@@ -80,14 +80,14 @@ public class AddFragment extends Fragment {
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_add, container, false);
 
-        search_user = view.findViewById(R.id.search_user);
-        search_user.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), search.class);
-                startActivity(intent);
-            }
-        });
+//        search_user = view.findViewById(R.id.search_user);
+//        search_user.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(getActivity(), search.class);
+//                startActivity(intent);
+//            }
+//        });
         add_listView = view.findViewById(R.id.add_list);
         simpleAdapter = new SimpleAdapter(getActivity(),getData(),R.layout.add_list_view,new String[]{"title","image"},new int[]{R.id.add_list_text1,R.id.add_list_image});
         add_listView.setAdapter(simpleAdapter);

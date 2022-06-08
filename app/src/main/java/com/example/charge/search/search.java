@@ -1,7 +1,10 @@
 package com.example.charge.search;
 
+import android.app.ActionBar;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -33,12 +36,14 @@ public class search extends BaseActivity {
     ListView search_list;
     TextView search_text1,search_text2;
     SimpleAdapter simpleAdapter;
+    ActionBar actionBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
         initView();
     }
+
     private void initView(){
         search_edit = findViewById(R.id.search_edit);
         search_image = findViewById(R.id.search_image);

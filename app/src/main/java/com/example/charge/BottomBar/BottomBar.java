@@ -1,7 +1,10 @@
 package com.example.charge.BottomBar;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -13,10 +16,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.charge.BaseActivity;
 import com.example.charge.R;
+import com.example.charge.edit.write_blog;
 import com.example.charge.fragment.AddFragment;
 import com.example.charge.fragment.HomeFragment;
 import com.example.charge.fragment.PersonalFragment;
+import com.example.charge.search.search;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -42,8 +48,46 @@ public class BottomBar extends BaseActivity {
         homeFragment = new HomeFragment();
         addFragment = new AddFragment();
         personalFragment = new PersonalFragment();
-
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.menu_title,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onMenuOpened(int featureId, Menu menu) {
+        if (menu != null){
+            if (menu.getClass().getSimpleName().equalsIgnoreCase("MenuBuilder")){
+                try {
+                    Method method = menu.getClass().getDeclaredMethod("setOptionalIconsVisible", Boolean.TYPE);
+                    method.setAccessible(true);
+                    method.invoke(menu, true);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+
+        }
+        return super.onMenuOpened(featureId, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch (item.getItemId()){
+            case R.id.menu_search:
+                Intent intent = new Intent(BottomBar.this, search.class);
+                startActivity(intent);
+                break;
+            case R.id.menu_add:
+                Intent intent1 = new Intent(BottomBar.this, write_blog.class);
+                startActivity(intent1);
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     private void newsList(){
 
     }

@@ -83,14 +83,14 @@ public class HomeFragment extends Fragment {
         // Inflate the layout for this fragment
 //        return inflater.inflate(R.layout.fragment_home, container, false);
         View view = inflater.inflate(R.layout.fragment_home,container,false);
-        home_add = view.findViewById(R.id.home_add);
-        home_add.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), write_blog.class);
-                startActivity(intent);
-            }
-        });
+//        home_add = view.findViewById(R.id.home_add);
+//        home_add.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(getActivity(), write_blog.class);
+//                startActivity(intent);
+//            }
+//        });
 
         home_list = view.findViewById(R.id.home_list);
         simpleAdapter = new SimpleAdapter(getActivity(),getData(),R.layout.home_listview,new String[]{"title","image1","image2","image3"},new int[]{R.id.home_list_text,R.id.home_list_image1,R.id.home_list_image2,R.id.home_list_image3});
